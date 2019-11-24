@@ -1,0 +1,64 @@
+/*
+ * @NOTE: Prepend a `~` to css file paths that are in your node_modules
+ *        See https://github.com/webpack-contrib/sass-loader#imports
+ */
+
+/* @import "~@fortawesome/fontawesome-free/css/all.css"; */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  color: #50514f;
+  background: white;
+}
+
+#root {
+  position: relative;
+  min-height: 100vh;
+}
+
+#background {
+  position: absolute;
+  background-image: url('https://res.cloudinary.com/dpekucrvb/image/upload/v1573451251/Artboard_1.png');
+  height: 400px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: -1;
+  background-size: auto;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+h1 {
+  font-weight: 300;
+  font-size: 3.9rem;
+}
+
+h2 {
+  font-weight: 300;
+  font-size: 3.1rem;
+  margin-bottom: 0.4rem;
+}
+
+h3 {
+  font-weight: 300;
+  font-size: 2.5rem;
+}
+
+p {
+  font-weight: 300;
+  font-size: 1.5rem;
+}
