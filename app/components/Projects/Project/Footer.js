@@ -6,7 +6,6 @@ import { ReactComponent as Trash } from '../../../assets/icons/trash.svg';
 import { ReactComponent as Edit } from '../../../assets/icons/edit.svg';
 import { ReactComponent as GitHub } from '../../../assets/icons/github.svg';
 import { ReactComponent as Monitor } from '../../../assets/icons/monitor.svg';
-import { ReactComponent as FileText } from '../../../assets/icons/file-text.svg';
 import { ReactComponent as Code } from '../../../assets/icons/code.svg';
 import { ReactComponent as ChevronDown } from '../../../assets/icons/chevron-down.svg';
 import { ReactComponent as ChevronUp } from '../../../assets/icons/chevron-up.svg';

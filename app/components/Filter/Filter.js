@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
+
 import { TagsContext } from '../../providers/TagsProvider';
 import { ProjectsContext } from '../../providers/ProjectsProvider';
 import Badge from '../Badge/Badge';

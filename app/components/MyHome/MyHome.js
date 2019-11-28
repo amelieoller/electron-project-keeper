@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+
 import { ReactComponent as Plus } from '../../assets/icons/plus.svg';
 import Projects from '../Projects/Projects';
 import Filter from '../Filter';
-import { Link } from 'react-router-dom';
 import Header from '../Header/Header';
 
 const StyledHome = styled.div``;

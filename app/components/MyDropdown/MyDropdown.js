@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { ReactComponent as ChevronDown } from '../../assets/icons/chevron-down.svg';
-import { ReactComponent as ChevronUp } from '../../assets/icons/chevron-up.svg';
 import Dropdown from 'react-dropdown';
+
 import { ProjectsContext } from '../../providers/ProjectsProvider';
+// import { ReactComponent as ChevronDown } from '../../assets/icons/chevron-down.svg';
+// import { ReactComponent as ChevronUp } from '../../assets/icons/chevron-up.svg';
 
 const StyledDropdown = styled.span`
   display: flex;

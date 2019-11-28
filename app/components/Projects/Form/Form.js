@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
+import { withRouter } from 'react-router-dom';
+
+import { firestore } from '../../../firebase';
+import { TagsContext } from '../../../providers/TagsProvider';
+import Checkbox from './Checkbox/Checkbox';
 import Button from '../../Button';
 import Input from './Input';
-import { firestore } from '../../../firebase';
-import { withRouter } from 'react-router-dom';
-import Checkbox from './Checkbox/Checkbox';
-import { TagsContext } from '../../../providers/TagsProvider';
 
-var remote = window.require('electron').remote;
-var { dialog } = remote.require('electron');
-
-const fs = window.require('fs');
+const remote = window.require('electron').remote;
+const { dialog } = remote.require('electron');
 
 const StyledForm = styled.div`
   position: relative;

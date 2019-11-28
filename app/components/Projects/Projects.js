@@ -1,7 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import Project from './Project';
+
 import { ProjectsContext } from '../../providers/ProjectsProvider';
+import Project from './Project';
 
 const StyledProjects = styled.div`
   display: grid;

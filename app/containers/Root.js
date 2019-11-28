@@ -2,12 +2,13 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
-import type { Store } from '../reducers/types';
-import Routes from '../Routes';
+import { ThemeProvider } from 'styled-components';
+
 import ProjectsProvider from '../providers/ProjectsProvider';
 import TagsProvider from '../providers/TagsProvider';
-import { ThemeProvider } from 'styled-components';
+import type { Store } from '../reducers/types';
 import theme from '../theme';
+import Routes from '../Routes';
 
 type Props = {
   store: Store,

@@ -1,4 +1,5 @@
 import React, { Component, createContext } from 'react';
+
 import { firestore } from '../firebase';
 import { collectIdsAndData } from '../utils/utilities';
 

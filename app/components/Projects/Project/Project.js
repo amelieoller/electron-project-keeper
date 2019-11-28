@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import Markdown from 'markdown-to-jsx';
 
 import { firestore } from '../../../firebase';
-import Footer from './Footer';
 import { ReactComponent as Star } from '../../../assets/icons/star.svg';
 import Button from '../../Button';
+import Footer from './Footer';
 
 const fs = require('fs');
 const exec = require('child_process').exec;
