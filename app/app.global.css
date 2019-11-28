@@ -5,7 +5,9 @@
 
 /* @import "~@fortawesome/fontawesome-free/css/all.css"; */
 
-* {
+*,
+*:after,
+*:before {
   box-sizing: border-box;
 }
 
@@ -61,4 +63,9 @@ h3 {
 p {
   font-weight: 300;
   font-size: 1.5rem;
+}
+
+hr {
+  margin: 3rem 0;
+  border: 0.5px solid #e9eff4;
 }
