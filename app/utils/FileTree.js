@@ -20,8 +20,9 @@ export default class FileTree {
 
   static readDir(path) {
     var fileArray = [];
+    const notesFileName = 'NOTES.md';
 
-    fs.readFile(`${path}/NOTES.md`, { encoding: 'utf-8' }, function(err, data) {
+    fs.readFile(`${path}/${notesFileName}`, { encoding: 'utf-8' }, function(err, data) {
       if (!err) {
         var newArr = data.split('\n');
         newArr.forEach(function(item) {

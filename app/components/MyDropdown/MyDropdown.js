@@ -100,8 +100,7 @@ const MyDropdown = ({ dropdownText, className }) => {
 };
 
 MyDropdown.propTypes = {
-  dropdownText: PropTypes.string.isRequired,
-  handleSelect: PropTypes.func.isRequired
+  dropdownText: PropTypes.string.isRequired
 };
 
 export default MyDropdown;

@@ -123,16 +123,22 @@ const Project = ({ project }) => {
   };
 
   const getNoteContents = () => {
-    const noteFileName = 'NOTES';
+    const notesFileName = 'NOTES.md';
+
     fs.readdir(project.folder, (err, files) => {
-      if (!files.includes(`${noteFileName}.md`)) {
+      if (!files.includes(notesFileName)) {
         setProjectNotes('no notes');
         return;
       }
-      const notesPath = `${project.folder}/${noteFileName}.md`;
-      const content = fs.readFileSync(notesPath).toString();
+
+      const notesPath = `${project.folder}/${notesFileName}`;
+      let content = fs.readFileSync(notesPath).toString();
 
       if (content !== projectNotes) {
+        if (content === '') {
+          content = 'No content in this NOTES.md file yet.';
+        }
+
         setProjectNotes(content);
       }
     });
@@ -216,8 +222,6 @@ const Project = ({ project }) => {
       return (
         <div className="notes">
           <hr />
-
-          <p className="notes-title">NOTES</p>
           <Markdown>{projectNotes}</Markdown>
         </div>
       );
