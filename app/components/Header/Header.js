@@ -20,7 +20,7 @@ const StyledHeader = styled.header`
       height: 3rem;
 
       path {
-        fill: ${props => props.theme.primary}6b;
+        fill: ${props => props.theme.primary};
       }
 
       &:hover {
@@ -50,7 +50,7 @@ const Header = ({ children, titleText }) => {
 };
 
 Header.propTypes = {
-  titleText: PropTypes.string.isRequired,
+  titleText: PropTypes.string,
   children: PropTypes.node.isRequired
 };
 
