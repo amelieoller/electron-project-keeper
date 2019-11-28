@@ -31,6 +31,7 @@ const StyledFooter = styled.div`
     cursor: pointer;
     color: ${props => props.theme.lightGrey};
 
+    &.active,
     &:hover {
       transition: all ${props => props.theme.transitions.ease};
       color: ${props => props.theme.darkerGrey};
@@ -52,7 +53,7 @@ const Footer = ({
   <StyledFooter className="footer">
     {folder || additionalImage ? (
       extraInfo ? (
-        <ChevronUp onClick={expandCard} />
+        <ChevronUp class="active" onClick={expandCard} />
       ) : (
         <ChevronDown onClick={expandCard} />
       )
