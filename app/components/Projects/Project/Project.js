@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import Markdown from 'markdown-to-jsx';
 
 import { firestore } from '../../../firebase';
 import { ReactComponent as Star } from '../../../assets/icons/star.svg';
-import Button from '../../Button';
 import Footer from './Footer';
+import AdditionalInfo from './AdditionalInfo';
 
-const fs = require('fs');
 const exec = require('child_process').exec;
 
 const StyledProject = styled.div`
@@ -104,100 +102,13 @@ const TopContent = styled.div`
   }
 `;
 
-const MoreInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  img {
-    width: 100%;
-  }
-`;
-
-const AdditionalImages = styled.div`
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  height: 200px;
-  width: 100%;
-  -webkit-overflow-scrolling: touch;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  .image-wrap {
-    flex: 0 0 auto;
-    margin-right: 1rem;
-    border: ${props => props.theme.border};
-    height: 200px;
-
-    img {
-      height: 100%;
-      width: auto;
-    }
-  }
-`;
-
 const Project = ({ project }) => {
+  const [showExtraInfo, setShowExtraInfo] = useState(false);
   const [projectNotes, setProjectNotes] = useState(null);
-  const [extraInfo, setExtraInfo] = useState(false);
-  const [additionalImages, setAdditionalImages] = useState([]);
+  const [additionalImages, setAdditionalImages] = useState(null);
 
   const handleDelete = id => {
     firestore.doc(`projects/${id}`).delete();
-  };
-
-  const getNoteContents = () => {
-    const notesFileName = 'NOTES.md';
-
-    fs.readdir(project.folder, (err, files) => {
-      if (!files.includes(notesFileName)) {
-        setProjectNotes('no notes');
-        return;
-      }
-
-      const notesPath = `${project.folder}/${notesFileName}`;
-      let content = fs.readFileSync(notesPath).toString();
-
-      if (content !== projectNotes) {
-        if (content === '') {
-          content = 'No content in this NOTES.md file yet.';
-        }
-
-        setProjectNotes(content);
-      }
-    });
-  };
-
-  const getImages = () => {
-    const imageFolder = 'images';
-    fs.readdir(`${project.folder}/${imageFolder}`, (err, files) => {
-      if (files) {
-        const filteredImages = files.filter(
-          file => file.includes('.gif') || file.includes('.png') || file.includes('.jpg')
-        );
-
-        setAdditionalImages(filteredImages);
-      }
-    });
-  };
-
-  const createNewFile = () => {
-    const notesPath = `${project.folder}/NOTES.md`;
-
-    fs.writeFile(notesPath, '', err => {
-      if (err) return console.log(err);
-
-      const content = '# NOTES \n Enter Some notes here...';
-      writeToFile(notesPath, content);
-      setProjectNotes(content);
-    });
-  };
-
-  const writeToFile = (path, content) => {
-    fs.writeFile(path, content, err => {
-      if (err) return console.log(err);
-      console.log('saved');
-    });
   };
 
   const executeCommand = (command, callback) => {
@@ -219,64 +130,7 @@ const Project = ({ project }) => {
   };
 
   const expandCard = () => {
-    setExtraInfo(!extraInfo);
-  };
-
-  const renderExtraInfo = () => {
-    if (project.folder) {
-      !projectNotes && getNoteContents();
-      additionalImages.length === 0 && getImages();
-    }
-
-    if (additionalImages.length !== 0 && projectNotes) {
-      return (
-        <>
-          <hr />
-          <AdditionalImages>
-            {additionalImages.map(image => (
-              <div key={image} className="image-wrap">
-                <img src={`${project.folder}/images/${image}`} alt="" />
-              </div>
-            ))}
-          </AdditionalImages>
-          <hr />
-          <div className="notes">
-            {projectNotes !== 'no notes' ? (
-              <Markdown>{projectNotes}</Markdown>
-            ) : (
-              <div>
-                No NOTES.md file found, would you like to create one?{' '}
-                <Button onClick={createNewFile}>Create NOTES.md File</Button>
-              </div>
-            )}
-          </div>
-        </>
-      );
-    }
-
-    if (additionalImages.length !== 0) {
-      return (
-        <>
-          <hr />
-          <AdditionalImages>
-            {additionalImages.map(image => (
-              <div className="image-wrap">
-                <img src={`${project.folder}/images/${image}`} alt="" />
-              </div>
-            ))}
-          </AdditionalImages>
-        </>
-      );
-    }
-
-    if (projectNotes) {
-      return (
-        <div className="notes">
-          <hr />
-          <Markdown>{projectNotes}</Markdown>
-        </div>
-      );
-    }
+    setShowExtraInfo(!showExtraInfo);
   };
 
   const handleStarClick = () => {
@@ -318,10 +172,18 @@ const Project = ({ project }) => {
             openFolderInEditor={openFolderInEditor}
             handleDelete={handleDelete}
             expandCard={expandCard}
-            extraInfo={extraInfo}
+            showExtraInfo={showExtraInfo}
           />
         </WithoutExtraContent>
-        {extraInfo && <MoreInfo>{renderExtraInfo()}</MoreInfo>}
+        {showExtraInfo && (
+          <AdditionalInfo
+            project={project}
+            projectNotes={projectNotes}
+            setProjectNotes={setProjectNotes}
+            additionalImages={additionalImages}
+            setAdditionalImages={setAdditionalImages}
+          />
+        )}
       </ProjectBody>
     </StyledProject>
   );

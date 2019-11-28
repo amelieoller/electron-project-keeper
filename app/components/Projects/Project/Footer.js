@@ -47,11 +47,11 @@ const Footer = ({
   openFolderInEditor,
   handleDelete,
   expandCard,
-  extraInfo
+  showExtraInfo
 }) => (
   <StyledFooter className="footer">
     {folder ? (
-      extraInfo ? (
+      showExtraInfo ? (
         <ChevronUp className="active" onClick={expandCard} />
       ) : (
         <ChevronDown onClick={expandCard} />
