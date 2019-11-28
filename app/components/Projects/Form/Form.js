@@ -7,6 +7,11 @@ import { withRouter } from 'react-router-dom';
 import Checkbox from './Checkbox/Checkbox';
 import { TagsContext } from '../../../providers/TagsProvider';
 
+var remote = window.require('electron').remote;
+var { dialog } = remote.require('electron');
+
+const fs = window.require('fs');
+
 const StyledForm = styled.div`
   position: relative;
   max-width: 50rem;
@@ -30,7 +35,6 @@ const Form = ({ existingProject, history }) => {
     folder: '',
     image: '',
     additionalImage: '',
-    server: '',
     live: '',
     tags: [],
     updated: new Date()
@@ -81,6 +85,21 @@ const Form = ({ existingProject, history }) => {
     firestore.doc(`projects/${project.id}`).update({ ...project, updated });
   };
 
+  const selectFolder = () => {
+    const directory = dialog.showOpenDialogSync({
+      properties: ['openDirectory'],
+      buttonLabel: 'Open Folder',
+      title: 'Open Folder'
+    });
+
+    if (directory.length === 0) return;
+
+    setProject({
+      ...project,
+      folder: directory[0]
+    });
+  };
+
   return (
     <StyledForm>
       <form onSubmit={handleSubmit}>
@@ -108,14 +127,9 @@ const Form = ({ existingProject, history }) => {
           title="GitHub URL"
           type="text"
         />
-        <Input
-          handleChange={handleChange}
-          value={project.folder}
-          name="folder"
-          placeholder="Folder Name"
-          title="Folder Name"
-          type="text"
-        />
+        <Button onClick={selectFolder}>Select Folder</Button>
+        <br></br>
+        Folder: {project.folder ? project.folder : 'No folder selected'}
         <Input
           handleChange={handleChange}
           value={project.image}
@@ -130,14 +144,6 @@ const Form = ({ existingProject, history }) => {
           name="additionalImage"
           placeholder="Additional Image"
           title="Additional Image"
-          type="text"
-        />
-        <Input
-          handleChange={handleChange}
-          value={project.server}
-          name="server"
-          placeholder="Server Command"
-          title="Server Command"
           type="text"
         />
         <Input

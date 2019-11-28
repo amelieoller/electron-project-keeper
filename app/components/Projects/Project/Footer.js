@@ -43,7 +43,7 @@ const StyledFooter = styled.div`
 `;
 
 const Footer = ({
-  project: { github, live, server, folder, id, additionalImage },
+  project: { github, live, folder, id, additionalImage },
   openFolderInEditor,
   handleDelete,
   expandCard,
@@ -65,7 +65,7 @@ const Footer = ({
           <GitHub />
         </a>
       )}
-      {server && (
+      {live && (
         <a target="_blank" rel="noopener noreferrer" href={live}>
           <Monitor />
         </a>
@@ -73,7 +73,7 @@ const Footer = ({
       <Link to={`/projects/${id}/edit`}>
         <Edit />
       </Link>
-      {server && (
+      {folder && (
         <a onClick={openFolderInEditor}>
           <Code />
         </a>
