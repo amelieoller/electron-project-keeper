@@ -1,16 +1,16 @@
-import React, { Component, createContext } from "react";
-import { firestore } from "../firebase";
-import { collectIdsAndData } from "../utils/utilities";
+import React, { Component, createContext } from 'react';
+import { firestore } from '../firebase';
+import { collectIdsAndData } from '../utils/utilities';
 
 export const ProjectsContext = createContext();
 
 class ProjectsProvider extends Component {
-  state = { projects: [], filter: { tags: [] } };
+  state = { projects: [], filter: { tags: [] }, sortBy: 'starred' };
 
   unsubscribe = null;
 
   componentDidMount = () => {
-    this.unsubscribe = firestore.collection("projects").orderBy("updated", "desc").onSnapshot(snapshot => {
+    this.unsubscribe = firestore.collection('projects').onSnapshot(snapshot => {
       const projects = snapshot.docs.map(collectIdsAndData);
       this.setState({ projects });
     });
@@ -38,31 +38,64 @@ class ProjectsProvider extends Component {
     });
   };
 
-  static applyFilter(projects, filter) {
-    let filteredProjects;
+  updateSort = toSortBy => {
+    this.setState({
+      sortBy: toSortBy
+    });
+  };
 
+  static applyFilterAndSort(projects, filter, sortBy) {
+    let filteredAndSortedProjects;
+
+    // Filter
     if (filter.tags.length === 0) {
-      filteredProjects = projects;
+      filteredAndSortedProjects = projects;
     } else {
-      filteredProjects = projects.filter(
-        r => filter.tags.every(tag => -1 !== r.tags.indexOf(tag))
+      filteredAndSortedProjects = projects.filter(r =>
+        filter.tags.every(tag => -1 !== r.tags.indexOf(tag))
       );
     }
 
-    return filteredProjects;
+    // Sort
+    if (sortBy === 'name') {
+      // sort by name
+      filteredAndSortedProjects.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (sortBy === 'updated') {
+      // sort by date
+      filteredAndSortedProjects.sort((a, b) => b.updated.seconds - a.updated.seconds);
+    } else if (sortBy === 'starred') {
+      // put starred first, then sort by last updated
+      filteredAndSortedProjects.sort((a, b) => {
+        if (a.starred) {
+          return -1;
+        } else if (b.starred) {
+          return 1;
+        } else {
+          return b.updated.seconds - a.updated.seconds;
+        }
+      });
+    }
+
+    return filteredAndSortedProjects;
   }
 
   render() {
-    const { projects, filter } = this.state;
+    const { projects, filter, sortBy } = this.state;
     const { children } = this.props;
 
-    const filteredProjects = ProjectsProvider.applyFilter(projects, filter);
+    const filteredProjects = ProjectsProvider.applyFilterAndSort(
+      projects,
+      filter,
+      sortBy
+    );
 
     return (
       <ProjectsContext.Provider
         value={{
           projects: filteredProjects,
           updateFilter: this.updateFilter,
+          updateSort: this.updateSort,
+          selectedSort: sortBy,
           filter
         }}
       >
