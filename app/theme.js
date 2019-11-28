@@ -9,6 +9,7 @@ const theme = {
   lighterGrey: '#E9EFF4',
   lightestGrey: '#F4F7F9',
   darkerGrey: '#989898',
+  borderColor: '#D0D7DD',
   border: ' 1px solid #D0D7DD',
 
   sizes: {

@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import Dropdown from 'react-dropdown';
 
 import { ProjectsContext } from '../../providers/ProjectsProvider';
-// import { ReactComponent as ChevronDown } from '../../assets/icons/chevron-down.svg';
-// import { ReactComponent as ChevronUp } from '../../assets/icons/chevron-up.svg';
+import { ReactComponent as ChevronDown } from '../../assets/icons/chevron-down.svg';
+import { ReactComponent as ChevronUp } from '../../assets/icons/chevron-up.svg';
 
 const StyledDropdown = styled.span`
   display: flex;
@@ -31,11 +31,11 @@ const StyledDropdown = styled.span`
   }
 
   .menu {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+    background-color: white;
+    border: 1px solid ${props => props.theme.borderColor};
     box-sizing: border-box;
-    margin-top: -1px;
+    margin-top: 3px;
+    border-radius: ${props => props.theme.sizes.borderRadius};
     max-height: 200px;
     overflow-y: auto;
     position: absolute;
@@ -44,27 +44,28 @@ const StyledDropdown = styled.span`
     z-index: 1000;
     -webkit-overflow-scrolling: touch;
 
+    > div:not(:last-child) {
+      border-bottom: ${props => props.theme.border};
+    }
+
     > div {
       box-sizing: border-box;
-      color: rgba(51, 51, 51, 0.8);
+      color: ${props => props.theme.text};
       cursor: pointer;
       display: block;
       padding: 0.5rem 1rem;
+
+      &:hover {
+        background: ${props => props.theme.primary};
+        color: white;
+      }
     }
   }
 
   .arrow {
-    border-color: #999 transparent transparent;
-    border-style: solid;
-    border-width: 5px 5px 0;
-    content: ' ';
-    display: block;
-    height: 0;
-    margin-top: -ceil(2.5);
     position: absolute;
-    right: 10px;
-    top: 10px;
-    width: 0;
+    right: 5px;
+    top: 0;
   }
 `;
 
@@ -89,12 +90,12 @@ const MyDropdown = ({ dropdownText, className }) => {
         onChange={handleSelect}
         placeholder={dropdownText}
         value={selectedSort}
-        // arrowClosed={<ChevronUp />}
-        // arrowOpen={<ChevronDown />}
+        arrowClosed={<ChevronUp className="arrow" />}
+        arrowOpen={<ChevronDown className="arrow" />}
         className="root"
         controlClassName="control"
         menuClassName="menu"
-        arrowClassName="arrow"
+        // arrowClassName="arrow"
       />
     </StyledDropdown>
   );
