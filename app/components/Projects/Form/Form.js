@@ -33,7 +33,6 @@ const Form = ({ existingProject, history }) => {
     github: '',
     folder: '',
     image: '',
-    additionalImage: '',
     live: '',
     tags: [],
     updated: new Date()
@@ -135,14 +134,6 @@ const Form = ({ existingProject, history }) => {
           name="image"
           placeholder="Image"
           title="Image"
-          type="text"
-        />
-        <Input
-          handleChange={handleChange}
-          value={project.additionalImage}
-          name="additionalImage"
-          placeholder="Additional Image"
-          title="Additional Image"
           type="text"
         />
         <Input

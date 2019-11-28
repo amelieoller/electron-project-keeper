@@ -43,16 +43,16 @@ const StyledFooter = styled.div`
 `;
 
 const Footer = ({
-  project: { github, live, folder, id, additionalImage },
+  project: { github, live, folder, id },
   openFolderInEditor,
   handleDelete,
   expandCard,
   extraInfo
 }) => (
   <StyledFooter className="footer">
-    {folder || additionalImage ? (
+    {folder ? (
       extraInfo ? (
-        <ChevronUp class="active" onClick={expandCard} />
+        <ChevronUp className="active" onClick={expandCard} />
       ) : (
         <ChevronDown onClick={expandCard} />
       )

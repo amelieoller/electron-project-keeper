@@ -14,13 +14,12 @@ const exec = require('child_process').exec;
 const StyledProject = styled.div`
   background: white;
   color: ${props => props.theme.text};
-  display: grid;
-  grid-template-rows: 270px auto;
   border: ${props => props.theme.border};
   transition: all 0.8s ease;
   border-radius: ${props => props.theme.sizes.borderRadius};
   padding: 2.5rem;
   position: relative;
+  display: block;
 
   @media (max-width: 750px) {
     border: none;
@@ -53,6 +52,7 @@ const ProjectImageTop = styled.div`
   background-position: center;
   position: relative;
   border-radius: 0.6rem 0.6rem 0px 0px;
+  height: 270px;
 `;
 
 const ProjectBody = styled.div`
@@ -113,9 +113,34 @@ const MoreInfo = styled.div`
   }
 `;
 
+const AdditionalImages = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  height: 200px;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .image-wrap {
+    flex: 0 0 auto;
+    margin-right: 1rem;
+    border: ${props => props.theme.border};
+    height: 200px;
+
+    img {
+      height: 100%;
+      width: auto;
+    }
+  }
+`;
+
 const Project = ({ project }) => {
   const [projectNotes, setProjectNotes] = useState(null);
   const [extraInfo, setExtraInfo] = useState(false);
+  const [additionalImages, setAdditionalImages] = useState([]);
 
   const handleDelete = id => {
     firestore.doc(`projects/${id}`).delete();
@@ -139,6 +164,19 @@ const Project = ({ project }) => {
         }
 
         setProjectNotes(content);
+      }
+    });
+  };
+
+  const getImages = () => {
+    const imageFolder = 'images';
+    fs.readdir(`${project.folder}/${imageFolder}`, (err, files) => {
+      if (files) {
+        const filteredImages = files.filter(
+          file => file.includes('.gif') || file.includes('.png') || file.includes('.jpg')
+        );
+
+        setAdditionalImages(filteredImages);
       }
     });
   };
@@ -185,14 +223,22 @@ const Project = ({ project }) => {
   };
 
   const renderExtraInfo = () => {
-    !projectNotes && project.folder && getNoteContents();
+    if (project.folder) {
+      !projectNotes && getNoteContents();
+      additionalImages.length === 0 && getImages();
+    }
 
-    if (project.additionalImage && projectNotes) {
+    if (additionalImages.length !== 0 && projectNotes) {
       return (
         <>
           <hr />
-          <img src={project.additionalImage} alt="" />
-
+          <AdditionalImages>
+            {additionalImages.map(image => (
+              <div key={image} className="image-wrap">
+                <img src={`${project.folder}/images/${image}`} alt="" />
+              </div>
+            ))}
+          </AdditionalImages>
           <hr />
           <div className="notes">
             {projectNotes !== 'no notes' ? (
@@ -208,11 +254,17 @@ const Project = ({ project }) => {
       );
     }
 
-    if (project.additionalImage) {
+    if (additionalImages.length !== 0) {
       return (
         <>
           <hr />
-          <img src={project.additionalImage} alt="" />
+          <AdditionalImages>
+            {additionalImages.map(image => (
+              <div className="image-wrap">
+                <img src={`${project.folder}/images/${image}`} alt="" />
+              </div>
+            ))}
+          </AdditionalImages>
         </>
       );
     }
