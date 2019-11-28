@@ -18,6 +18,7 @@ const StyledProject = styled.div`
   padding: 2.5rem;
   position: relative;
   display: block;
+  overflow-x: auto;
 
   @media (max-width: 750px) {
     border: none;

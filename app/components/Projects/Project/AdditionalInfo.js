@@ -11,6 +11,7 @@ const fs = require('fs');
 const MoreInfo = styled.div`
   display: flex;
   flex-direction: column;
+  overflow-x: auto;
 
   img {
     width: 100%;
