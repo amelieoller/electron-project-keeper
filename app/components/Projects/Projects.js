@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
 import { ProjectsContext } from '../../providers/ProjectsProvider';
@@ -40,12 +40,18 @@ const StyledProjects = styled.div`
 
 const Projects = () => {
   const { projects } = useContext(ProjectsContext);
-
+  const [projectOpenId, setProjectOpenId] = useState(null);
+  
   return (
     <>
       <StyledProjects>
         {projects.map(project => (
-          <Project key={project.id} project={project} />
+          <Project
+            key={project.id}
+            project={project}
+            projectOpenId={projectOpenId}
+            setProjectOpenId={setProjectOpenId}
+          />
         ))}
       </StyledProjects>
     </>

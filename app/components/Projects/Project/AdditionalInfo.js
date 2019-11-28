@@ -61,20 +61,22 @@ const AdditionalInfo = ({
     const notesFileName = 'NOTES.md';
 
     fs.readdir(project.folder, (err, files) => {
-      if (!files.includes(notesFileName)) {
-        setProjectNotes('no notes');
-        return;
-      }
-
-      const notesPath = `${project.folder}/${notesFileName}`;
-      let content = fs.readFileSync(notesPath).toString();
-
-      if (content !== projectNotes) {
-        if (content === '') {
-          content = 'No content in this NOTES.md file yet.';
+      if (files) {
+        if (!files.includes(notesFileName)) {
+          setProjectNotes('no notes');
+          return;
         }
 
-        setProjectNotes(content);
+        const notesPath = `${project.folder}/${notesFileName}`;
+        let content = fs.readFileSync(notesPath).toString();
+
+        if (content !== projectNotes) {
+          if (content === '') {
+            content = 'No content in this NOTES.md file yet.';
+          }
+
+          setProjectNotes(content);
+        }
       }
     });
   };

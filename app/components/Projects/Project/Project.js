@@ -58,7 +58,7 @@ const ProjectBody = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100%;
+  height: calc(100% - 270px);
 `;
 
 const WithoutExtraContent = styled.div`
@@ -102,8 +102,7 @@ const TopContent = styled.div`
   }
 `;
 
-const Project = ({ project }) => {
-  const [showExtraInfo, setShowExtraInfo] = useState(false);
+const Project = ({ project, projectOpenId, setProjectOpenId }) => {
   const [projectNotes, setProjectNotes] = useState(null);
   const [additionalImages, setAdditionalImages] = useState(null);
 
@@ -130,7 +129,11 @@ const Project = ({ project }) => {
   };
 
   const expandCard = () => {
-    setShowExtraInfo(!showExtraInfo);
+    if (project.id === projectOpenId) {
+      setProjectOpenId(null);
+    } else {
+      setProjectOpenId(project.id);
+    }
   };
 
   const handleStarClick = () => {
@@ -172,10 +175,10 @@ const Project = ({ project }) => {
             openFolderInEditor={openFolderInEditor}
             handleDelete={handleDelete}
             expandCard={expandCard}
-            showExtraInfo={showExtraInfo}
+            showExtraInfo={projectOpenId === project.id}
           />
         </WithoutExtraContent>
-        {showExtraInfo && (
+        {projectOpenId === project.id && (
           <AdditionalInfo
             project={project}
             projectNotes={projectNotes}
