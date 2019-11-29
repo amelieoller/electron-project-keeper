@@ -50,14 +50,10 @@ const Footer = ({
   showExtraInfo
 }) => (
   <StyledFooter className="footer">
-    {folder ? (
-      showExtraInfo ? (
-        <ChevronUp className="active" onClick={expandCard} />
-      ) : (
-        <ChevronDown onClick={expandCard} />
-      )
+    {showExtraInfo ? (
+      <ChevronUp className="active" onClick={expandCard} />
     ) : (
-      <span></span>
+      <ChevronDown onClick={expandCard} />
     )}
     <div>
       {github && (

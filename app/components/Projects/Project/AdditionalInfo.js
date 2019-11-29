@@ -79,6 +79,21 @@ const AdditionalImages = styled.div`
   }
 `;
 
+const MissingNotification = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  p {
+    color: ${props => props.theme.darkerGrey};
+  }
+
+  .button {
+    margin-left: 1rem;
+    white-space: nowrap;
+  }
+`;
+
 const AdditionalInfo = ({
   project,
   projectNotes,
@@ -101,7 +116,6 @@ const AdditionalInfo = ({
     fs.readdir(project.folder, (err, files) => {
       if (files) {
         if (!files.includes(notesFileName)) {
-          setProjectNotes('no notes');
           return;
         }
 
@@ -185,57 +199,76 @@ const AdditionalInfo = ({
     });
   };
 
+  const addFolder = () => {
+    const imageFolder = 'images';
+    const projectPath = project.folder;
+    const fullImageFolderPath = `${projectPath}/${imageFolder}`;
+
+    if (!fs.existsSync(fullImageFolderPath)) {
+      fs.mkdirSync(fullImageFolderPath);
+      getImages();
+    }
+  };
+
   return (
     <MoreInfo>
-      {additionalImages && (
-        <>
-          <hr />
-          <AdditionalImages>
-            <div className="add-image" onClick={handleAddImage}>
-              <Plus />
+      <>
+        <hr />
+        {additionalImages ? (
+          <>
+            <AdditionalImages>
+              <div className="add-image" onClick={handleAddImage}>
+                <Plus />
+              </div>
+              {additionalImages.map(image => (
+                <div
+                  key={image}
+                  className="image-wrap"
+                  onClick={() => setModalIsOpen(!modalIsOpen)}
+                >
+                  <img src={`${project.folder}/images/${image}`} alt="" />
+                </div>
+              ))}
+            </AdditionalImages>
+            <ModalGateway>
+              {modalIsOpen ? (
+                <Modal onClose={() => setModalIsOpen(!modalIsOpen)}>
+                  <Carousel
+                    views={additionalImages.map(image => {
+                      return {
+                        src: `${project.folder}/images/${image}`
+                      };
+                    })}
+                  />
+                </Modal>
+              ) : null}
+            </ModalGateway>
+          </>
+        ) : (
+          <MissingNotification>
+            <p>You Have No Image Folder for This Project.</p>
+            <div className="button">
+              <Button onClick={addFolder}>Add Image Folder</Button>
             </div>
-            {additionalImages.map(image => (
-              <div
-                key={image}
-                className="image-wrap"
-                onClick={() => setModalIsOpen(!modalIsOpen)}
-              >
-                <img src={`${project.folder}/images/${image}`} alt="" />
-              </div>
-            ))}
-          </AdditionalImages>
+          </MissingNotification>
+        )}
+      </>
 
-          <ModalGateway>
-            {modalIsOpen ? (
-              <Modal onClose={() => setModalIsOpen(!modalIsOpen)}>
-                <Carousel
-                  views={additionalImages.map(image => {
-                    return {
-                      src: `${project.folder}/images/${image}`
-                    };
-                  })}
-                />
-              </Modal>
-            ) : null}
-          </ModalGateway>
-        </>
-      )}
-
-      {projectNotes && (
-        <>
-          <hr />
-          <div className="notes">
-            {projectNotes !== 'no notes' ? (
-              <Markdown>{projectNotes}</Markdown>
-            ) : (
-              <div>
-                No NOTES.md file found, would you like to create one?{' '}
-                <Button onClick={createNewFile}>Create NOTES.md File</Button>
+      <>
+        <hr />
+        <div className="notes">
+          {!!projectNotes ? (
+            <Markdown>{projectNotes}</Markdown>
+          ) : (
+            <MissingNotification>
+              <p>You Have No Notes File for This Project.</p>
+              <div className="button">
+                <Button onClick={createNewFile}>Add NOTES.md File</Button>
               </div>
-            )}
-          </div>
-        </>
-      )}
+            </MissingNotification>
+          )}
+        </div>
+      </>
     </MoreInfo>
   );
 };
