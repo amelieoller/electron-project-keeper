@@ -75,6 +75,9 @@ const ProjectBody = styled.div`
   border-left: ${props => props.starred && props.theme.border};
   padding-left: ${props => props.starred && '2rem'};
 
+  /* Create better fix for tall neighbor */
+  max-height: 28rem;
+
   @media (max-width: 870px) {
     border-left: none;
     padding-left: 0;

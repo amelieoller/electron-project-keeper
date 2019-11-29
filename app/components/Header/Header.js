@@ -20,7 +20,7 @@ const StyledHeader = styled.header`
       height: 3rem;
 
       path {
-        fill: ${props => props.theme.primary};
+        fill: ${props => props.theme.primaryLight};
       }
 
       &:hover {

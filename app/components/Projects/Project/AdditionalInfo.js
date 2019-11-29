@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Markdown from 'markdown-to-jsx';
 import Carousel, { Modal, ModalGateway } from 'react-images';
 
+import { twoFlatArraysAreEqual } from '../../../utils/utilities';
 import Button from '../../Button';
 
 const fs = require('fs');
@@ -55,8 +56,8 @@ const AdditionalInfo = ({
 
   useEffect(() => {
     if (project.folder) {
-      !projectNotes && getNoteContents();
-      !additionalImages && getImages();
+      getNoteContents();
+      getImages();
     }
   }, []);
 
@@ -73,6 +74,7 @@ const AdditionalInfo = ({
         const notesPath = `${project.folder}/${notesFileName}`;
         let content = fs.readFileSync(notesPath).toString();
 
+        // Only update note if it has changed
         if (content !== projectNotes) {
           if (content === '') {
             content = 'No content in this NOTES.md file yet.';
@@ -93,7 +95,10 @@ const AdditionalInfo = ({
           file => file.includes('.gif') || file.includes('.png') || file.includes('.jpg')
         );
 
-        setAdditionalImages(filteredImages);
+        // If new and previous arrays are equal don't set images
+        if (!twoFlatArraysAreEqual(additionalImages, filteredImages)) {
+          setAdditionalImages(filteredImages);
+        }
       } else {
         setAdditionalImages(null);
       }
