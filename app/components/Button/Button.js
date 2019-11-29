@@ -19,7 +19,7 @@ const StyledButton = styled.button`
   }
 
   &.selected {
-    background: ${props => props.theme.primary};
+    background: ${({ theme }) => theme.primary};
     color: white;
   }
 

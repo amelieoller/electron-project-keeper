@@ -17,11 +17,11 @@ const StyledForm = styled.div`
   position: relative;
   max-width: 95rem;
   margin: 5em auto;
-  background: ${props => props.theme.transparentWhite};
+  background: ${({ theme }) => theme.transparentWhite};
   width: 100%;
   padding: 11rem 9rem;
-  border: ${props => props.theme.border};
-  border-radius: ${props => props.theme.sizes.borderRadius};
+  border: ${({ theme }) => theme.border};
+  border-radius: ${({ theme }) => theme.sizes.borderRadius};
 
   @media (max-width: 870px) {
     padding: 7rem 5rem;
@@ -53,7 +53,7 @@ const StyledForm = styled.div`
   .input-label {
     font-size: 1.2rem;
     font-weight: 300;
-    color: ${props => props.theme.grey};
+    color: ${({ theme }) => theme.grey};
     text-transform: uppercase;
     margin-bottom: 0.4rem;
   }

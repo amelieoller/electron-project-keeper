@@ -20,11 +20,11 @@ const StyledCheckbox = styled.div`
 
     &:hover,
     &:active {
-      color: ${props => props.theme.text};
+      color: ${({ theme }) => theme.text};
     }
 
     &:hover .helper {
-      border-color: ${props => props.theme.darkerGrey};
+      border-color: ${({ theme }) => theme.darkerGrey};
     }
   }
 
@@ -35,13 +35,13 @@ const StyledCheckbox = styled.div`
     left: 0;
 
     &:checked ~ .helper {
-      color: ${props => props.theme.primary};
+      color: ${({ theme }) => theme.primary};
 
       &,
       ::after,
       &::before {
         opacity: 1;
-        transition: height ${props => props.theme.transitions.ease};
+        transition: height ${({ theme }) => theme.transitions.ease};
       }
 
       &::after {
@@ -63,10 +63,10 @@ const StyledCheckbox = styled.div`
     width: 1.5rem;
     height: 1.5rem;
     z-index: 0;
-    border: ${props => props.theme.border};
+    border: ${({ theme }) => theme.border};
     border-radius: 0.0625rem;
-    transition: border-color ${props => props.theme.transitions.ease};
-    border-radius: ${props => props.theme.sizes.borderRadius};
+    transition: border-color ${({ theme }) => theme.transitions.ease};
+    border-radius: ${({ theme }) => theme.sizes.borderRadius};
     ${props => props.checked && `border-color: ${props.theme.darkerGrey}`}
 
     &::before,
@@ -74,12 +74,12 @@ const StyledCheckbox = styled.div`
       position: absolute;
       height: 0;
       width: 0.25rem;
-      background-color: ${props => props.theme.primary};
+      background-color: ${({ theme }) => theme.primary};
       display: block;
       transform-origin: left top;
       border-radius: 0.25rem;
       content: '';
-      transition: opacity ${props => props.theme.transitions.ease}, height 0s linear 0.28s;
+      transition: opacity ${({ theme }) => theme.transitions.ease}, height 0s linear 0.28s;
       opacity: 0;
     }
 

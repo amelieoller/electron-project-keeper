@@ -11,7 +11,7 @@ const StyledHeader = styled.header`
     h1 {
       font-size: 3rem;
       margin: 0;
-      color: ${props => props.theme.primaryLight};
+      color: ${({ theme }) => theme.primaryLight};
     }
   }
 
@@ -20,14 +20,14 @@ const StyledHeader = styled.header`
       height: 3rem;
 
       path {
-        fill: ${props => props.theme.primaryLight};
+        fill: ${({ theme }) => theme.primaryLight};
       }
 
       &:hover {
         filter: drop-shadow(2px 2px 1px rgba(155, 67, 65, 0.15));
 
         path {
-          fill: ${props => props.theme.primary};
+          fill: ${({ theme }) => theme.primary};
         }
       }
     }

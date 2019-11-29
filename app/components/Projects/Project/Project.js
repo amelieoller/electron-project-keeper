@@ -10,11 +10,11 @@ import AdditionalInfo from './AdditionalInfo';
 const exec = require('child_process').exec;
 
 const StyledProject = styled.div`
-  background: ${props => props.theme.transparentWhite};
-  color: ${props => props.theme.text};
-  border: ${props => props.theme.border};
+  background: ${({ theme }) => theme.transparentWhite};
+  color: ${({ theme }) => theme.text};
+  border: ${({ theme }) => theme.border};
   transition: all 0.8s ease;
-  border-radius: ${props => props.theme.sizes.borderRadius};
+  border-radius: ${({ theme }) => theme.sizes.borderRadius};
   padding: 2.5rem;
   position: relative;
   display: ${props => (props.starred ? 'grid' : 'block')};
@@ -39,15 +39,15 @@ const StyledStar = styled.span`
   cursor: pointer;
 
   path {
-    color: ${props => props.theme.lightGrey};
+    color: ${({ theme }) => theme.lightGrey};
     color: ${props => props.starred && props.theme.primary} !important;
     fill: ${props => (props.starred ? props.theme.primary : 'transparent')};
   }
 
   &:hover path {
-    transition: all ${props => props.theme.transitions.ease};
-    fill: ${props => props.theme.primary};
-    color: ${props => props.theme.primary} !important;
+    transition: all ${({ theme }) => theme.transitions.ease};
+    fill: ${({ theme }) => theme.primary};
+    color: ${({ theme }) => theme.primary} !important;
   }
 `;
 

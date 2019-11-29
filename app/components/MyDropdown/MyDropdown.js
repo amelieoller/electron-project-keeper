@@ -19,23 +19,23 @@ const StyledDropdown = styled.span`
   .control {
     position: relative;
     overflow: hidden;
-    border: 1px solid ${props => props.theme.primary};
-    border-radius: ${props => props.theme.sizes.borderRadius};
+    border: 1px solid ${({ theme }) => theme.primary};
+    border-radius: ${({ theme }) => theme.sizes.borderRadius};
     box-sizing: border-box;
-    color: ${props => props.theme.darkerGrey};
+    color: ${({ theme }) => theme.darkerGrey};
     cursor: default;
     outline: none;
     transition: all 200ms ease;
     padding: 0.2rem 3.5rem 0.2rem 1rem;
-    background: ${props => props.theme.lightestGrey};
+    background: ${({ theme }) => theme.lightestGrey};
   }
 
   .menu {
     background-color: white;
-    border: 1px solid ${props => props.theme.borderColor};
+    border: 1px solid ${({ theme }) => theme.borderColor};
     box-sizing: border-box;
     margin-top: 3px;
-    border-radius: ${props => props.theme.sizes.borderRadius};
+    border-radius: ${({ theme }) => theme.sizes.borderRadius};
     max-height: 200px;
     overflow-y: auto;
     position: absolute;
@@ -45,18 +45,18 @@ const StyledDropdown = styled.span`
     -webkit-overflow-scrolling: touch;
 
     > div:not(:last-child) {
-      border-bottom: ${props => props.theme.border};
+      border-bottom: ${({ theme }) => theme.border};
     }
 
     > div {
       box-sizing: border-box;
-      color: ${props => props.theme.text};
+      color: ${({ theme }) => theme.text};
       cursor: pointer;
       display: block;
       padding: 0.5rem 1rem;
 
       &:hover {
-        background: ${props => props.theme.primary};
+        background: ${({ theme }) => theme.primary};
         color: white;
       }
     }

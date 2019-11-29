@@ -15,8 +15,8 @@ const StyledBadge = styled.span`
     props.isSelected ? props.theme.primary : props.theme.lightestGrey};
 
   &:hover {
-    background: ${props => props.theme.primary};
-    border: 1px solid ${props => props.theme.primaryDark};
+    background: ${({ theme }) => theme.primary};
+    border: 1px solid ${({ theme }) => theme.primaryDark};
     color: white;
   }
 `;

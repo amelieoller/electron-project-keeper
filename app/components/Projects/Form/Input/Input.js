@@ -8,7 +8,7 @@ const StyledInput = styled.div`
   label {
     font-size: 1.2rem;
     font-weight: 300;
-    color: ${props => props.theme.grey};
+    color: ${({ theme }) => theme.grey};
     text-transform: uppercase;
   }
 
@@ -23,20 +23,20 @@ const StyledInput = styled.div`
     font-size: 1.6rem;
     width: 100%;
     padding: 1.4rem 1.8rem;
-    color: ${props => props.theme.textDark};
-    border: ${props => props.theme.border};
-    border-radius: ${props => props.theme.sizes.borderRadius};
+    color: ${({ theme }) => theme.textDark};
+    border: ${({ theme }) => theme.border};
+    border-radius: ${({ theme }) => theme.sizes.borderRadius};
 
     &::placeholder {
-      color: ${props => props.theme.darkerGrey};
+      color: ${({ theme }) => theme.darkerGrey};
     }
   }
 
   input:focus,
   textarea:focus {
-    border-color: ${props => props.theme.primary}87;
+    border-color: ${({ theme }) => theme.primary}87;
     box-shadow: 0 1px 1px rgba(229, 103, 23, 0.075) inset,
-      0 0 8px ${props => props.theme.primary}87;
+      0 0 8px ${({ theme }) => theme.primary}87;
     outline: 0 none;
   }
 `;

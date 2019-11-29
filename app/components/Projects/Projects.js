@@ -21,7 +21,7 @@ const StyledProjects = styled.div`
 
     & > div {
       &:nth-child(odd) {
-        background: ${props => props.theme.primaryBackground};
+        background: ${({ theme }) => theme.primaryBackground};
 
         .star-container {
           path {

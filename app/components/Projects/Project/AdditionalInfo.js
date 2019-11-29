@@ -39,17 +39,17 @@ const AdditionalImages = styled.div`
   .add-image {
     flex: 0 0 auto;
     margin-right: 1rem;
-    border: ${props => props.theme.border};
+    border: ${({ theme }) => theme.border};
     height: 200px;
     width: 8rem;
     cursor: pointer;
 
     &:hover {
-      background: ${props => props.theme.lightGrey};
-      transition: all ${props => props.theme.transitions.ease};
+      background: ${({ theme }) => theme.lightGrey};
+      transition: all ${({ theme }) => theme.transitions.ease};
 
       svg path {
-        fill: ${props => props.theme.darkerGrey};
+        fill: ${({ theme }) => theme.darkerGrey};
       }
     }
 
@@ -60,7 +60,7 @@ const AdditionalImages = styled.div`
       height: 100%;
 
       path {
-        fill: ${props => props.theme.lightGrey};
+        fill: ${({ theme }) => theme.lightGrey};
       }
     }
   }
@@ -68,7 +68,7 @@ const AdditionalImages = styled.div`
   .image-wrap {
     flex: 0 0 auto;
     margin-right: 1rem;
-    border: ${props => props.theme.border};
+    border: ${({ theme }) => theme.border};
     height: 200px;
 
     img {

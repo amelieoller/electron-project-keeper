@@ -28,12 +28,12 @@ const StyledFooter = styled.div`
 
   svg {
     cursor: pointer;
-    color: ${props => props.theme.lightGrey};
+    color: ${({ theme }) => theme.lightGrey};
 
     &.active,
     &:hover {
-      transition: all ${props => props.theme.transitions.ease};
-      color: ${props => props.theme.darkerGrey};
+      transition: all ${({ theme }) => theme.transitions.ease};
+      color: ${({ theme }) => theme.darkerGrey};
     }
   }
 

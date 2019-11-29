@@ -10,7 +10,7 @@ const StyledNotification = styled.div`
   align-items: center;
 
   p {
-    color: ${props => props.theme.darkerGrey};
+    color: ${({ theme }) => theme.darkerGrey};
   }
 
   .button {

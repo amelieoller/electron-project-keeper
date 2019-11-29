@@ -11,7 +11,7 @@ const StyledTitleBar = styled.div`
     rgba(255, 255, 255, 0.8155637254901961) 0%,
     rgba(227, 232, 235, 1) 100%
   );
-  color: ${props => props.theme.darkerGrey};
+  color: ${({ theme }) => theme.darkerGrey};
   height: 3rem;
   text-align: center;
   position: fixed;
