@@ -105,6 +105,8 @@ const StyledForm = styled.div`
       font-size: 1.3rem;
       white-space: nowrap;
       padding: 0.7rem 1.4rem;
+      text-align: center;
+      display: inline-block;
     }
   }
 
@@ -163,9 +165,12 @@ const Form = ({ existingProject, history, titleText }) => {
 
   const handleSubmit = event => {
     event.preventDefault();
-    history.push('/');
 
-    project.id ? handleUpdate() : handleCreate();
+    if (project.title) {
+      history.push('/');
+
+      project.id ? handleUpdate() : handleCreate();
+    }
   };
 
   const handleCreate = () => {
@@ -275,7 +280,7 @@ const Form = ({ existingProject, history, titleText }) => {
               onKeyDown={e => e.keyCode === 13 && handleTagCreation}
               value={newTag}
               name="newTag"
-              placeholder="Create A New Tag"
+              placeholder="New Tag Name"
               title="New Tag"
               type="text"
               className="new-tag-form-group"
