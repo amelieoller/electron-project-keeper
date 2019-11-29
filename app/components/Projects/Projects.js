@@ -64,6 +64,7 @@ const Projects = () => {
                 project={project}
                 projectOpenId={projectOpenId}
                 setProjectOpenId={setProjectOpenId}
+                selectedSort={selectedSort}
               />
             ))}
         </StyledProjects>
@@ -76,6 +77,7 @@ const Projects = () => {
             project={project}
             projectOpenId={projectOpenId}
             setProjectOpenId={setProjectOpenId}
+            selectedSort={selectedSort}
           />
         ))}
       </StyledProjects>

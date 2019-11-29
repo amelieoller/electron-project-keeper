@@ -72,7 +72,7 @@ const ProjectBody = styled.div`
   flex-direction: column;
   justify-content: space-between;
   height: ${props => (props.starred ? '100%' : 'calc(100% - 270px)')};
-  border-left: ${props => props.starred && props.theme.border};
+  border-left: ${props => (props.starred ? props.theme.border : 'none')};
   padding-left: ${props => props.starred && '2rem'};
 
   /* Create better fix for tall neighbor */
@@ -125,7 +125,7 @@ const TopContent = styled.div`
   }
 `;
 
-const Project = ({ project, projectOpenId, setProjectOpenId }) => {
+const Project = ({ project, projectOpenId, setProjectOpenId, selectedSort }) => {
   const [projectNotes, setProjectNotes] = useState(null);
   const [additionalImages, setAdditionalImages] = useState(null);
 
@@ -167,9 +167,11 @@ const Project = ({ project, projectOpenId, setProjectOpenId }) => {
       .update({ starred: !project.starred, updated });
   };
 
+  const isStarred = project.starred && selectedSort === 'starred';
+
   return (
-    <StyledProject starred={project.starred}>
-      <StyledStar starred={project.starred} className="star-container">
+    <StyledProject starred={isStarred}>
+      <StyledStar starred={isStarred} className="star-container">
         <Star onClick={handleStarClick} />
       </StyledStar>
 
@@ -179,10 +181,10 @@ const Project = ({ project, projectOpenId, setProjectOpenId }) => {
             ? project.image
             : 'https://res.cloudinary.com/dpekucrvb/image/upload/v1573953781/undraw_insert_block_efyb.svg'
         }
-        starred={project.starred}
+        starred={isStarred}
         onClick={expandCard}
       />
-      <ProjectBody starred={project.starred}>
+      <ProjectBody starred={isStarred}>
         <WithoutExtraContent>
           <TopContent>
             <h3>{project.title}</h3>
