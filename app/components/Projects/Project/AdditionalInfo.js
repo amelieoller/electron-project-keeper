@@ -6,7 +6,7 @@ import Carousel, { Modal, ModalGateway } from 'react-images';
 
 import { twoFlatArraysAreEqual } from '../../../utils/utilities';
 import { ReactComponent as Plus } from '../../../assets/icons/plus.svg';
-import Button from '../../Button';
+import TextNotificationWithButton from '../../TextNotificationWithButton';
 
 const fs = require('fs');
 const remote = window.require('electron').remote;
@@ -76,21 +76,6 @@ const AdditionalImages = styled.div`
       width: auto;
       cursor: zoom-in;
     }
-  }
-`;
-
-const MissingNotification = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  p {
-    color: ${props => props.theme.darkerGrey};
-  }
-
-  .button {
-    margin-left: 1rem;
-    white-space: nowrap;
   }
 `;
 
@@ -244,12 +229,11 @@ const AdditionalInfo = ({
           </ModalGateway>
         </>
       ) : (
-        <MissingNotification>
-          <p>You Have No Image Folder for This Project.</p>
-          <div className="button">
-            <Button onClick={addFolder}>Add Image Folder</Button>
-          </div>
-        </MissingNotification>
+        <TextNotificationWithButton
+          text="You Have No Image Folder for This Project."
+          buttonText="Add Image Folder"
+          onButtonClick={addFolder}
+        />
       )}
     </>
   );
@@ -261,12 +245,11 @@ const AdditionalInfo = ({
         {!!projectNotes ? (
           <Markdown>{projectNotes}</Markdown>
         ) : (
-          <MissingNotification>
-            <p>You Have No Notes File for This Project.</p>
-            <div className="button">
-              <Button onClick={createNewFile}>Add NOTES.md File</Button>
-            </div>
-          </MissingNotification>
+          <TextNotificationWithButton
+            text="You Have No Notes File for This Project."
+            buttonText="Add NOTES.md File"
+            onButtonClick={createNewFile}
+          />
         )}
       </div>
     </>
@@ -275,12 +258,11 @@ const AdditionalInfo = ({
   const renderAddFolderNotification = () => (
     <>
       <hr />
-      <MissingNotification>
-        <p>You Have No Folder Selected for This Project.</p>
-        <div className="button">
-          <Button onClick={addFolder}>Add Folder</Button>
-        </div>
-      </MissingNotification>
+      <TextNotificationWithButton
+        text="You Have No Folder Selected for This Project."
+        buttonText="Add Folder"
+        onButtonClick={addFolder}
+      />
     </>
   );
 
