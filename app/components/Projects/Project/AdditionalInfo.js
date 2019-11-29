@@ -210,65 +210,90 @@ const AdditionalInfo = ({
     }
   };
 
-  return (
-    <MoreInfo>
-      <>
-        <hr />
-        {additionalImages ? (
-          <>
-            <AdditionalImages>
-              <div className="add-image" onClick={handleAddImage}>
-                <Plus />
+  const renderImageSection = () => (
+    <>
+      <hr />
+      {additionalImages ? (
+        <>
+          <AdditionalImages>
+            <div className="add-image" onClick={handleAddImage}>
+              <Plus />
+            </div>
+            {additionalImages.map(image => (
+              <div
+                key={image}
+                className="image-wrap"
+                onClick={() => setModalIsOpen(!modalIsOpen)}
+              >
+                <img src={`${project.folder}/images/${image}`} alt="" />
               </div>
-              {additionalImages.map(image => (
-                <div
-                  key={image}
-                  className="image-wrap"
-                  onClick={() => setModalIsOpen(!modalIsOpen)}
-                >
-                  <img src={`${project.folder}/images/${image}`} alt="" />
-                </div>
-              ))}
-            </AdditionalImages>
-            <ModalGateway>
-              {modalIsOpen ? (
-                <Modal onClose={() => setModalIsOpen(!modalIsOpen)}>
-                  <Carousel
-                    views={additionalImages.map(image => {
-                      return {
-                        src: `${project.folder}/images/${image}`
-                      };
-                    })}
-                  />
-                </Modal>
-              ) : null}
-            </ModalGateway>
-          </>
+            ))}
+          </AdditionalImages>
+          <ModalGateway>
+            {modalIsOpen ? (
+              <Modal onClose={() => setModalIsOpen(!modalIsOpen)}>
+                <Carousel
+                  views={additionalImages.map(image => {
+                    return {
+                      src: `${project.folder}/images/${image}`
+                    };
+                  })}
+                />
+              </Modal>
+            ) : null}
+          </ModalGateway>
+        </>
+      ) : (
+        <MissingNotification>
+          <p>You Have No Image Folder for This Project.</p>
+          <div className="button">
+            <Button onClick={addFolder}>Add Image Folder</Button>
+          </div>
+        </MissingNotification>
+      )}
+    </>
+  );
+
+  const renderNotesSection = () => (
+    <>
+      <hr />
+      <div className="notes">
+        {!!projectNotes ? (
+          <Markdown>{projectNotes}</Markdown>
         ) : (
           <MissingNotification>
-            <p>You Have No Image Folder for This Project.</p>
+            <p>You Have No Notes File for This Project.</p>
             <div className="button">
-              <Button onClick={addFolder}>Add Image Folder</Button>
+              <Button onClick={createNewFile}>Add NOTES.md File</Button>
             </div>
           </MissingNotification>
         )}
-      </>
+      </div>
+    </>
+  );
 
-      <>
-        <hr />
-        <div className="notes">
-          {!!projectNotes ? (
-            <Markdown>{projectNotes}</Markdown>
-          ) : (
-            <MissingNotification>
-              <p>You Have No Notes File for This Project.</p>
-              <div className="button">
-                <Button onClick={createNewFile}>Add NOTES.md File</Button>
-              </div>
-            </MissingNotification>
-          )}
+  const renderAddFolderNotification = () => (
+    <>
+      <hr />
+      <MissingNotification>
+        <p>You Have No Folder Selected for This Project.</p>
+        <div className="button">
+          <Button onClick={addFolder}>Add Folder</Button>
         </div>
-      </>
+      </MissingNotification>
+    </>
+  );
+
+  return (
+    <MoreInfo>
+      {project.folder ? (
+        <>
+          {renderImageSection()}
+          {renderNotesSection()}
+        </>
+      ) : (
+        renderAddFolderNotification()
+      )}
     </MoreInfo>
   );
 };
