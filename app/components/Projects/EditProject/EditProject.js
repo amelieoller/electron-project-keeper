@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 
 import { firestore } from '../../../firebase';
 import { collectIdsAndData } from '../../../utils/utilities';
-import { ReactComponent as Home } from '../../../assets/icons/home.svg';
-import Header from '../../Header';
 import Form from '../Form';
 import Loading from '../../Loading';
 
@@ -31,11 +28,6 @@ const EditProject = ({ match }) => {
 
   return (
     <StyledEditProject>
-      <Header>
-        <Link to="/">
-          <Home />
-        </Link>
-      </Header>
       {project ? (
         <Form existingProject={project} titleText={`Edit ${project.title}`} />
       ) : (
