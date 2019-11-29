@@ -38,19 +38,16 @@ const StyledHeader = styled.header`
   }
 `;
 
-const Header = ({ children, titleText }) => {
+const Header = ({ children }) => {
   return (
     <StyledHeader>
-      <div className="left">
-        <h1>{titleText}</h1>
-      </div>
+      <div className="left"></div>
       <div className="right">{children}</div>
     </StyledHeader>
   );
 };
 
 Header.propTypes = {
-  titleText: PropTypes.string,
   children: PropTypes.node.isRequired
 };
 

@@ -11,7 +11,7 @@ const StyledHome = styled.div``;
 
 const MyHome = () => (
   <StyledHome>
-    <Header titleText="Project Keeper">
+    <Header>
       <Link to="/new-project">
         <Plus />
       </Link>
