@@ -7,6 +7,7 @@ import { collectIdsAndData } from '../../../utils/utilities';
 import { ReactComponent as Home } from '../../../assets/icons/home.svg';
 import Header from '../../Header';
 import Form from '../Form';
+import Loading from '../../Loading';
 
 const StyledEditProject = styled.div``;
 
@@ -30,12 +31,16 @@ const EditProject = ({ match }) => {
 
   return (
     <StyledEditProject>
-      <Header titleText="Edit Project">
+      <Header>
         <Link to="/">
           <Home />
         </Link>
       </Header>
-      <Form existingProject={project} />
+      {project ? (
+        <Form existingProject={project} titleText={`Edit ${project.title}`} />
+      ) : (
+        <Loading />
+      )}
     </StyledEditProject>
   );
 };
