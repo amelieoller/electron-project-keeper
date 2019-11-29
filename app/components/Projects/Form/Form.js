@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { firestore } from '../../../firebase';
 import { TagsContext } from '../../../providers/TagsProvider';
 import { ReactComponent as Check } from '../../../assets/icons/check.svg';
+import { ReactComponent as X } from '../../../assets/icons/x.svg';
 import Checkbox from './Checkbox/Checkbox';
 import Button from '../../Button';
 import Input from './Input';
@@ -56,6 +57,33 @@ const StyledForm = styled.div`
     color: ${({ theme }) => theme.grey};
     text-transform: uppercase;
     margin-bottom: 0.4rem;
+  }
+
+  .tag-wrapper {
+    display: inline-block;
+
+    .delete-tag {
+      width: 9px;
+      position: relative;
+      cursor: pointer;
+      display: inline-block;
+
+      svg {
+        display: none;
+        position: absolute;
+        left: -10px;
+        bottom: -5px;
+        color: ${({ theme }) => theme.lightGrey};
+      }
+
+      &:hover svg {
+        color: ${({ theme }) => theme.primaryBackground};
+      }
+    }
+
+    &:hover .delete-tag svg {
+      display: inline-block;
+    }
   }
 
   .new-tag-form {
@@ -169,6 +197,10 @@ const Form = ({ existingProject, history, titleText }) => {
     setNewTag('');
   };
 
+  const handleDeleteTag = tagId => {
+    firestore.doc(`tags/${tagId}`).delete();
+  };
+
   return (
     <StyledForm>
       <h2>{titleText}</h2>
@@ -219,13 +251,22 @@ const Form = ({ existingProject, history, titleText }) => {
           <div className="input-label">Tags</div>
           {tags &&
             tags.map(tag => (
-              <Checkbox
-                key={tag.id}
-                label={tag.name}
-                checked={project.tags.includes(tag.name)}
-                onChange={handleTagSelect}
-                name={tag.name}
-              />
+              <div className="tag-wrapper" key={tag.id}>
+                <Checkbox
+                  label={tag.name}
+                  checked={project.tags.includes(tag.name)}
+                  onChange={handleTagSelect}
+                  name={tag.name}
+                />
+                <span
+                  className="delete-tag"
+                  onClick={() => {
+                    if (window.confirm('Are you sure?')) handleDeleteTag(tag.id);
+                  }}
+                >
+                  <X />
+                </span>
+              </div>
             ))}
 
           <div className="new-tag-form">
@@ -239,11 +280,9 @@ const Form = ({ existingProject, history, titleText }) => {
               type="text"
               className="new-tag-form-group"
             />
-            {/* <span> */}
             <Button type="button" onClick={handleTagCreation}>
               Create Tag
             </Button>
-            {/* </span> */}
           </div>
         </div>
 
