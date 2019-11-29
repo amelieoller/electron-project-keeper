@@ -26,7 +26,7 @@ const StyledFilter = styled.div`
     position: relative;
   }
 
-  @media (max-width: 750px) {
+  @media (max-width: 550px) {
     margin: 3rem;
   }
 `;

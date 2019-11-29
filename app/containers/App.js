@@ -9,7 +9,7 @@ type Props = {
 const StyledApp = styled.div`
   padding: 5rem;
 
-  @media (max-width: 750px) {
+  @media (max-width: 550px) {
     padding: 0;
   }
 `;

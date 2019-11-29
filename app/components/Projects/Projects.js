@@ -6,11 +6,16 @@ import Project from './Project';
 
 const StyledProjects = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  grid-template-columns: ${props =>
+    props.starred ? '1fr 1fr' : 'repeat(auto-fill, minmax(360px, 1fr))'};
   grid-gap: 5rem;
   margin-top: 4rem;
 
-  @media (max-width: 750px) {
+  @media (max-width: 1300px) {
+    grid-template-columns: ${props => props.starred && '1fr'};
+  }
+
+  @media (max-width: 550px) {
     grid-template-columns: 1fr;
     grid-gap: 0;
 
@@ -39,13 +44,33 @@ const StyledProjects = styled.div`
 `;
 
 const Projects = () => {
-  const { projects } = useContext(ProjectsContext);
+  const { projects, selectedSort } = useContext(ProjectsContext);
   const [projectOpenId, setProjectOpenId] = useState(null);
-  
+  let otherProjects = projects;
+
+  if (selectedSort === 'starred') {
+    otherProjects = projects.filter(project => !project.starred);
+  }
+
   return (
     <>
+      {selectedSort === 'starred' && (
+        <StyledProjects starred={true}>
+          {projects
+            .filter(project => project.starred)
+            .map(project => (
+              <Project
+                key={project.id}
+                project={project}
+                projectOpenId={projectOpenId}
+                setProjectOpenId={setProjectOpenId}
+              />
+            ))}
+        </StyledProjects>
+      )}
+
       <StyledProjects>
-        {projects.map(project => (
+        {otherProjects.map(project => (
           <Project
             key={project.id}
             project={project}

@@ -33,7 +33,7 @@ const StyledHeader = styled.header`
     }
   }
 
-  @media (max-width: 750px) {
+  @media (max-width: 550px) {
     margin: 3rem;
   }
 `;

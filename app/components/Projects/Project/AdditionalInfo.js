@@ -13,6 +13,8 @@ const MoreInfo = styled.div`
   flex-direction: column;
   overflow-x: auto;
 
+  grid-column: span 2;
+
   img {
     width: 100%;
   }

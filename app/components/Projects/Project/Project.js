@@ -17,10 +17,17 @@ const StyledProject = styled.div`
   border-radius: ${props => props.theme.sizes.borderRadius};
   padding: 2.5rem;
   position: relative;
-  display: block;
+  display: ${props => (props.starred ? 'grid' : 'block')};
   overflow-x: auto;
 
-  @media (max-width: 750px) {
+  grid-template-columns: 40% auto;
+  grid-column-gap: 4rem;
+
+  @media (max-width: 870px) {
+    display: block;
+  }
+
+  @media (max-width: 550px) {
     border: none;
   }
 `;
@@ -52,6 +59,11 @@ const ProjectImageTop = styled.div`
   position: relative;
   border-radius: 0.6rem 0.6rem 0px 0px;
   height: 270px;
+  margin-right: ${props => props.starred && '2rem'};
+
+  @media (max-width: 870px) {
+    margin-right: 0;
+  }
 `;
 
 const ProjectBody = styled.div`
@@ -59,7 +71,14 @@ const ProjectBody = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: calc(100% - 270px);
+  height: ${props => (props.starred ? '100%' : 'calc(100% - 270px)')};
+  border-left: ${props => props.starred && props.theme.border};
+  padding-left: ${props => props.starred && '2rem'};
+
+  @media (max-width: 870px) {
+    border-left: none;
+    padding-left: 0;
+  }
 `;
 
 const WithoutExtraContent = styled.div`
@@ -146,7 +165,7 @@ const Project = ({ project, projectOpenId, setProjectOpenId }) => {
   };
 
   return (
-    <StyledProject>
+    <StyledProject starred={project.starred}>
       <StyledStar starred={project.starred} className="star-container">
         <Star onClick={handleStarClick} />
       </StyledStar>
@@ -157,8 +176,9 @@ const Project = ({ project, projectOpenId, setProjectOpenId }) => {
             ? project.image
             : 'https://res.cloudinary.com/dpekucrvb/image/upload/v1573953781/undraw_insert_block_efyb.svg'
         }
+        starred={project.starred}
       />
-      <ProjectBody>
+      <ProjectBody starred={project.starred}>
         <WithoutExtraContent>
           <TopContent>
             <h3>{project.title}</h3>
@@ -179,16 +199,16 @@ const Project = ({ project, projectOpenId, setProjectOpenId }) => {
             showExtraInfo={projectOpenId === project.id}
           />
         </WithoutExtraContent>
-        {projectOpenId === project.id && (
-          <AdditionalInfo
-            project={project}
-            projectNotes={projectNotes}
-            setProjectNotes={setProjectNotes}
-            additionalImages={additionalImages}
-            setAdditionalImages={setAdditionalImages}
-          />
-        )}
       </ProjectBody>
+      {projectOpenId === project.id && (
+        <AdditionalInfo
+          project={project}
+          projectNotes={projectNotes}
+          setProjectNotes={setProjectNotes}
+          additionalImages={additionalImages}
+          setAdditionalImages={setAdditionalImages}
+        />
+      )}
     </StyledProject>
   );
 };
