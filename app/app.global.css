@@ -69,3 +69,26 @@ hr {
   margin: 3rem 0;
   border: 0.5px solid #e9eff4;
 }
+
+body {
+  -ms-overflow-style: scrollbar;
+  -webkit-app-region: drag;
+}
+
+input[type='submit'],
+input[type='reset'],
+input[type='button'],
+input[type='text'],
+button,
+textarea {
+  -webkit-app-region: no-drag;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  -webkit-user-select: none;
+}
