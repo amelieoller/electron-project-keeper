@@ -24,7 +24,9 @@ const TextNotificationWithButton = ({ text, buttonText, onButtonClick }) => {
     <StyledNotification>
       <p>{text}</p>
       <div className="button">
-        <Button onClick={onButtonClick}>{buttonText}</Button>
+        <Button type="button" onClick={onButtonClick}>
+          {buttonText}
+        </Button>
       </div>
     </StyledNotification>
   );

@@ -41,8 +41,8 @@ const StyledInput = styled.div`
   }
 `;
 
-const Input = props => (
-  <StyledInput textarea={props.type}>
+const Input = ({ className, ...props }) => (
+  <StyledInput textarea={props.type} className={className}>
     <label htmlFor={props.name}>{props.title}</label>
     {props.type === 'textarea' ? (
       <textarea id={props.name} {...props} />

@@ -58,6 +58,28 @@ const StyledForm = styled.div`
     margin-bottom: 0.4rem;
   }
 
+  .new-tag-form {
+    display: grid;
+    align-items: flex-end;
+    grid-template-columns: 2fr 1fr;
+
+    .new-tag-form-group {
+      margin-right: 1.5rem;
+      margin-bottom: 0;
+
+      input {
+        font-size: 1.3rem;
+        padding: 0.7rem 1.1rem;
+      }
+    }
+
+    button {
+      font-size: 1.3rem;
+      white-space: nowrap;
+      padding: 0.7rem 1.4rem;
+    }
+  }
+
   .footer {
     grid-column: span 2;
 
@@ -81,6 +103,8 @@ const Form = ({ existingProject, history, titleText }) => {
   };
 
   const [project, setProject] = useState(initialProjectState);
+  const [newTag, setNewTag] = useState('');
+
   useEffect(() => {
     !!existingProject && setProject({ ...initialProjectState, ...existingProject });
   }, [existingProject]);
@@ -140,6 +164,11 @@ const Form = ({ existingProject, history, titleText }) => {
     });
   };
 
+  const handleTagCreation = () => {
+    firestore.collection('tags').add({ name: newTag });
+    setNewTag('');
+  };
+
   return (
     <StyledForm>
       <h2>{titleText}</h2>
@@ -187,7 +216,7 @@ const Form = ({ existingProject, history, titleText }) => {
           />
         </div>
         <div className="checkboxes">
-          <div className="input-label">Tags:</div>
+          <div className="input-label">Tags</div>
           {tags &&
             tags.map(tag => (
               <Checkbox
@@ -198,6 +227,24 @@ const Form = ({ existingProject, history, titleText }) => {
                 name={tag.name}
               />
             ))}
+
+          <div className="new-tag-form">
+            <Input
+              onChange={e => setNewTag(e.target.value)}
+              onKeyDown={e => e.keyCode === 13 && handleTagCreation}
+              value={newTag}
+              name="newTag"
+              placeholder="Create A New Tag"
+              title="New Tag"
+              type="text"
+              className="new-tag-form-group"
+            />
+            {/* <span> */}
+            <Button type="button" onClick={handleTagCreation}>
+              Create Tag
+            </Button>
+            {/* </span> */}
+          </div>
         </div>
 
         <div className="footer">
