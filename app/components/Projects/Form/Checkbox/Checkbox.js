@@ -4,16 +4,19 @@ import styled from 'styled-components';
 const StyledCheckbox = styled.div`
   display: inline-block;
   margin-right: 0.8rem;
-  margin-bottom: 0.8rem;
+  margin-bottom: 1.2rem;
+  line-height: 1.5rem;
 
   label {
     position: relative;
     cursor: pointer;
-    padding-left: 1.8rem;
+    padding-left: 2rem;
     text-align: left;
     color: #818181;
     display: block;
     font-size: 1.5rem;
+
+    ${props => props.checked && `color: ${props.theme.text}`}
 
     &:hover,
     &:active {
@@ -21,7 +24,7 @@ const StyledCheckbox = styled.div`
     }
 
     &:hover .helper {
-      color: ${props => props.theme.primary};
+      border-color: ${props => props.theme.darkerGrey};
     }
   }
 
@@ -38,7 +41,7 @@ const StyledCheckbox = styled.div`
       ::after,
       &::before {
         opacity: 1;
-        transition: height 0.28s ease;
+        transition: height ${props => props.theme.transitions.ease};
       }
 
       &::after {
@@ -47,7 +50,7 @@ const StyledCheckbox = styled.div`
 
       &::before {
         height: 1.7rem;
-        transition-delay: 0.28s;
+        transition-delay: 0.12s;
       }
     }
   }
@@ -60,9 +63,11 @@ const StyledCheckbox = styled.div`
     width: 1.5rem;
     height: 1.5rem;
     z-index: 0;
-    border: 0.125em solid currentColor;
+    border: ${props => props.theme.border};
     border-radius: 0.0625rem;
-    transition: border-color 0.28s ease;
+    transition: border-color ${props => props.theme.transitions.ease};
+    border-radius: ${props => props.theme.sizes.borderRadius};
+    ${props => props.checked && `border-color: ${props.theme.darkerGrey}`}
 
     &::before,
     &::after {
@@ -74,21 +79,27 @@ const StyledCheckbox = styled.div`
       transform-origin: left top;
       border-radius: 0.25rem;
       content: '';
-      transition: opacity 0.28s ease, height 0s linear 0.28s;
+      transition: opacity ${props => props.theme.transitions.ease}, height 0s linear 0.28s;
       opacity: 0;
     }
 
     &::before {
-      top: 1rem;
+      top: 1.1rem;
       left: 0.6rem;
       transform: rotate(-135deg);
       box-shadow: 0 0 0 0.0625em #fff;
+      border-bottom-left-radius: 0.25rem;
+      border-bottom-right-radius: 0.25rem;
+      border-top-left-radius: 0.25rem;
     }
 
     &::after {
-      top: 0.4rem;
+      top: 0.5rem;
       left: 0;
       transform: rotate(-45deg);
+      border-top-left-radius: 0.25rem;
+      border-top-right-radius: 0.25rem;
+      border-bottom-left-radius: 0.25rem;
     }
   }
 
@@ -97,16 +108,14 @@ const StyledCheckbox = styled.div`
   }
 `;
 
-const Checkbox = props => {
-  return (
-    <StyledCheckbox>
-      <label>
-        <input type="checkbox" {...props} />
-        <i className="helper"></i>
-        {props.name}
-      </label>
-    </StyledCheckbox>
-  );
-};
+const Checkbox = props => (
+  <StyledCheckbox checked={props.checked}>
+    <label>
+      <input type="checkbox" {...props} />
+      <i className="helper"></i>
+      {props.name}
+    </label>
+  </StyledCheckbox>
+);
 
 export default Checkbox;
