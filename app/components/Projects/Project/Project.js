@@ -10,7 +10,7 @@ import AdditionalInfo from './AdditionalInfo';
 const exec = require('child_process').exec;
 
 const StyledProject = styled.div`
-  background: white;
+  background: ${props => props.theme.transparentWhite};
   color: ${props => props.theme.text};
   border: ${props => props.theme.border};
   transition: all 0.8s ease;
@@ -180,6 +180,7 @@ const Project = ({ project, projectOpenId, setProjectOpenId }) => {
             : 'https://res.cloudinary.com/dpekucrvb/image/upload/v1573953781/undraw_insert_block_efyb.svg'
         }
         starred={project.starred}
+        onClick={expandCard}
       />
       <ProjectBody starred={project.starred}>
         <WithoutExtraContent>

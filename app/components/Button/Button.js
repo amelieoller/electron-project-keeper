@@ -3,13 +3,20 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const StyledButton = styled.button`
-  display: inline-block;
   font-size: 1.4rem;
   border-radius: 0.3rem;
-  padding: 0.6rem 1.4rem;
-  border: 1px solid ${props => props.theme.primary};
-  color: ${props => props.theme.primary};
+  padding: 0.8rem 1.8rem;
+  border: 1px solid
+    ${props => (props.full ? props.theme.primaryDark : props.theme.primary)};
+  color: ${props => (props.full ? 'white' : props.theme.primary)};
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  background: ${props => (props.full ? props.theme.primary : 'transparent')};
+
+  svg {
+    margin-right: 0.5rem;
+  }
 
   &.selected {
     background: ${props => props.theme.primary};
@@ -17,28 +24,19 @@ const StyledButton = styled.button`
   }
 
   &:hover {
-    background: ${props => props.theme.primaryDark};
+    background: ${props => (props.full ? props.theme.primaryDark : props.theme.primary)};
     color: white;
   }
 `;
 
-const Button = ({ children, disabled, type, ...props }) => {
-  return (
-    <StyledButton aria-disabled={disabled} disabled={disabled} type={type} {...props}>
-      {children}
-    </StyledButton>
-  );
-};
+const Button = ({ full, children, ...props }) => (
+  <StyledButton full={full} isArray={Array.isArray(children)} {...props}>
+    {children}
+  </StyledButton>
+);
 
 Button.propTypes = {
-  children: PropTypes.node.isRequired,
-  onClick: PropTypes.func,
-  disabled: PropTypes.bool
-};
-
-Button.defaultProps = {
-  disabled: false,
-  onClick: undefined
+  children: PropTypes.node.isRequired
 };
 
 export default Button;
