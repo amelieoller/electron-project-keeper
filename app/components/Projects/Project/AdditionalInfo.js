@@ -5,9 +5,12 @@ import Markdown from 'markdown-to-jsx';
 import Carousel, { Modal, ModalGateway } from 'react-images';
 
 import { twoFlatArraysAreEqual } from '../../../utils/utilities';
+import { ReactComponent as Plus } from '../../../assets/icons/plus.svg';
 import Button from '../../Button';
 
 const fs = require('fs');
+const remote = window.require('electron').remote;
+const { dialog } = remote.require('electron');
 
 const MoreInfo = styled.div`
   display: flex;
@@ -28,8 +31,38 @@ const AdditionalImages = styled.div`
   height: 200px;
   width: 100%;
   -webkit-overflow-scrolling: touch;
+
   &::-webkit-scrollbar {
     display: none;
+  }
+
+  .add-image {
+    flex: 0 0 auto;
+    margin-right: 1rem;
+    border: ${props => props.theme.border};
+    height: 200px;
+    width: 8rem;
+    cursor: pointer;
+
+    &:hover {
+      background: ${props => props.theme.lightGrey};
+      transition: all ${props => props.theme.transitions.ease};
+
+      svg path {
+        fill: ${props => props.theme.darkerGrey};
+      }
+    }
+
+    svg {
+      width: 30px;
+      margin: 0 auto;
+      display: block;
+      height: 100%;
+
+      path {
+        fill: ${props => props.theme.lightGrey};
+      }
+    }
   }
 
   .image-wrap {
@@ -41,6 +74,7 @@ const AdditionalImages = styled.div`
     img {
       height: 100%;
       width: auto;
+      cursor: zoom-in;
     }
   }
 `;
@@ -124,12 +158,42 @@ const AdditionalInfo = ({
     });
   };
 
+  const handleAddImage = () => {
+    const files = dialog.showOpenDialogSync({
+      properties: ['openFile'],
+      filters: [
+        {
+          name: 'Image',
+          extensions: ['png', 'gif', 'jpg']
+        }
+      ]
+    });
+
+    // If no files
+    if (!files) return;
+
+    const oldPath = files[0];
+    const index = oldPath.lastIndexOf('/');
+    const fileName = oldPath.slice(index + 1);
+    const newPath = `${project.folder}/images/${fileName}`;
+
+    // Move file from original directory to new image directory
+    fs.rename(oldPath, newPath, err => {
+      if (err) throw err;
+      getImages();
+      console.log('Rename complete!');
+    });
+  };
+
   return (
     <MoreInfo>
       {additionalImages && (
         <>
           <hr />
           <AdditionalImages>
+            <div className="add-image" onClick={handleAddImage}>
+              <Plus />
+            </div>
             {additionalImages.map(image => (
               <div
                 key={image}
