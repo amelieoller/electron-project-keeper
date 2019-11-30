@@ -7,7 +7,7 @@ import Markdown from 'markdown-to-jsx';
 import 'ace-builds/src-noconflict/mode-markdown';
 import 'ace-builds/src-noconflict/theme-github';
 
-import TextNotificationWithButton from '../../TextNotificationWithButton';
+import TextNotificationWithButton from '../../molecules/TextNotificationWithButton';
 
 const fs = require('fs');
 

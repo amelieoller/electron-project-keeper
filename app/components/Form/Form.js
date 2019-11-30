@@ -2,14 +2,14 @@ import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 
-import { firestore } from '../../../firebase';
-import { TagsContext } from '../../../providers/TagsProvider';
-import { ReactComponent as Check } from '../../../assets/icons/check.svg';
-import { ReactComponent as X } from '../../../assets/icons/x.svg';
-import Checkbox from './Checkbox/Checkbox';
-import Button from '../../Button';
-import Input from './Input';
-import TextNotificationWithButton from '../../TextNotificationWithButton';
+import { firestore } from '../../firebase';
+import { TagsContext } from '../../providers/TagsProvider';
+import { ReactComponent as Check } from '../../assets/icons/check.svg';
+import { ReactComponent as X } from '../../assets/icons/x.svg';
+import Checkbox from '../../atoms/Checkbox/Checkbox';
+import Button from '../../atoms/Button';
+import Input from '../../atoms/Input';
+import TextNotificationWithButton from '../../molecules/TextNotificationWithButton';
 
 const remote = window.require('electron').remote;
 const { dialog } = remote.require('electron');

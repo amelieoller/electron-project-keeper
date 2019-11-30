@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
 import { ProjectsContext } from '../../providers/ProjectsProvider';
-import Project from './Project';
+import Project from '../Project';
 
 const StyledProjects = styled.div`
   display: grid;

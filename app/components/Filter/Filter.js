@@ -3,8 +3,8 @@ import styled from 'styled-components';
 
 import { TagsContext } from '../../providers/TagsProvider';
 import { ProjectsContext } from '../../providers/ProjectsProvider';
-import Badge from '../Badge/Badge';
-import MyDropdown from '../MyDropdown';
+import Badge from '../../atoms/Badge/Badge';
+import MyDropdown from '../../atoms/MyDropdown';
 
 const StyledFilter = styled.div`
   margin-bottom: 1.4rem;

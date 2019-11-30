@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-import { firestore } from '../../../firebase';
-import { collectIdsAndData } from '../../../utils/utilities';
+import { firestore } from '../../firebase';
+import { collectIdsAndData } from '../../utils/utilities';
 import Form from '../Form';
-import Loading from '../../Loading';
+import Loading from '../../atoms/Loading';
 
 const StyledEditProject = styled.div``;
 

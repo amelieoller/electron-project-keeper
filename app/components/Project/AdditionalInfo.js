@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Carousel, { Modal, ModalGateway } from 'react-images';
 
-import { twoFlatArraysAreEqual } from '../../../utils/utilities';
-import { ReactComponent as Plus } from '../../../assets/icons/plus.svg';
-import TextNotificationWithButton from '../../TextNotificationWithButton';
+import { twoFlatArraysAreEqual } from '../../utils/utilities';
+import { ReactComponent as Plus } from '../../assets/icons/plus.svg';
+import TextNotificationWithButton from '../../molecules/TextNotificationWithButton';
 import NotesWindow from './NotesWindow';
 
 const fs = require('fs');

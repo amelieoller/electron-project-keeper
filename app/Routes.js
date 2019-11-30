@@ -3,8 +3,8 @@ import { Switch, Route } from 'react-router';
 import routes from './constants/routes';
 import App from './containers/App';
 import HomePage from './containers/HomePage';
-import NewProject from './components/Projects/NewProject';
-import EditProject from './components/Projects/EditProject';
+import NewProject from './components/NewProject';
+import EditProject from './components/EditProject';
 
 export default () => (
   <App>

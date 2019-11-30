@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-import { firestore } from '../../../firebase';
-import { ReactComponent as Star } from '../../../assets/icons/star.svg';
+import { firestore } from '../../firebase';
+import { ReactComponent as Star } from '../../assets/icons/star.svg';
 import Footer from './Footer';
 import AdditionalInfo from './AdditionalInfo';
 
