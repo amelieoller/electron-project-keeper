@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import Markdown from 'markdown-to-jsx';
 import Carousel, { Modal, ModalGateway } from 'react-images';
 
 import { twoFlatArraysAreEqual } from '../../../utils/utilities';
 import { ReactComponent as Plus } from '../../../assets/icons/plus.svg';
 import TextNotificationWithButton from '../../TextNotificationWithButton';
+import NotesWindow from './NotesWindow';
 
 const fs = require('fs');
 const remote = window.require('electron').remote;
@@ -238,23 +238,6 @@ const AdditionalInfo = ({
     </>
   );
 
-  const renderNotesSection = () => (
-    <>
-      <hr />
-      <div className="notes">
-        {!!projectNotes ? (
-          <Markdown>{projectNotes}</Markdown>
-        ) : (
-          <TextNotificationWithButton
-            text="You Have No Notes File for This Project."
-            buttonText="Add NOTES.md File"
-            onButtonClick={createNewFile}
-          />
-        )}
-      </div>
-    </>
-  );
-
   const renderAddFolderNotification = () => (
     <>
       <hr />
@@ -271,7 +254,17 @@ const AdditionalInfo = ({
       {project.folder ? (
         <>
           {renderImageSection()}
-          {renderNotesSection()}
+          {
+            <>
+              <hr />
+              <NotesWindow
+                projectNotes={projectNotes}
+                onChange={setProjectNotes}
+                createNewFile={createNewFile}
+                project={project}
+              />
+            </>
+          }
         </>
       ) : (
         renderAddFolderNotification()
