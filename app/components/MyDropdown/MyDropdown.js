@@ -23,11 +23,11 @@ const StyledDropdown = styled.span`
     border-radius: ${({ theme }) => theme.sizes.borderRadius};
     box-sizing: border-box;
     color: ${({ theme }) => theme.darkerGrey};
-    cursor: default;
     outline: none;
     transition: all 200ms ease;
     padding: 0.2rem 3.5rem 0.2rem 1rem;
     background: ${({ theme }) => theme.lightestGrey};
+    cursor: pointer;
   }
 
   .menu {
