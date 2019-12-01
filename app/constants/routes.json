@@ -1,6 +1,5 @@
 {
   "HOME": "/",
-  "COUNTER": "/counter",
   "NEW_PROJECT": "/new-project",
   "EDIT_PROJECT": "/projects/:projectId/edit"
 }
