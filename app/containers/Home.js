@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Projects from '../Projects/Projects';
-import Filter from '../Filter';
+import Projects from '../components/Projects';
+import Filter from '../components/Filter';
 
 const Home = () => (
   <>
