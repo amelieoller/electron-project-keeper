@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Carousel, { Modal, ModalGateway } from 'react-images';
 
 import { twoFlatArraysAreEqual } from '../../utils/utilities';
+import { firestore } from '../../firebase';
 import { ReactComponent as Plus } from '../../assets/icons/plus.svg';
 import TextNotificationWithButton from '../../molecules/TextNotificationWithButton';
 import NotesWindow from './NotesWindow';
@@ -195,6 +196,22 @@ const AdditionalInfo = ({
     }
   };
 
+  const handleUpdate = directory => {
+    firestore.doc(`projects/${project.id}`).update({ ...project, folder: directory });
+  };
+
+  const selectFolder = () => {
+    const directory = dialog.showOpenDialogSync({
+      properties: ['openDirectory'],
+      buttonLabel: 'Select Folder',
+      title: 'Select Folder'
+    });
+
+    if (directory.length === 0) return;
+
+    handleUpdate(directory[0]);
+  };
+
   const renderImageSection = () => (
     <>
       <hr />
@@ -244,7 +261,7 @@ const AdditionalInfo = ({
       <TextNotificationWithButton
         text="You Have No Folder Selected for This Project."
         buttonText="Add Folder"
-        onButtonClick={addFolder}
+        onButtonClick={selectFolder}
       />
     </>
   );

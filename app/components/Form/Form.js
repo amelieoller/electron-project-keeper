@@ -11,7 +11,7 @@ import Button from '../../atoms/Button';
 import Input from '../../atoms/Input';
 import TextNotificationWithButton from '../../molecules/TextNotificationWithButton';
 
-const remote = window.require('electron').remote;
+const { remote } = window.require('electron');
 const { dialog } = remote.require('electron');
 
 const StyledForm = styled.div`
@@ -185,8 +185,8 @@ const Form = ({ existingProject, history, titleText }) => {
   const selectFolder = () => {
     const directory = dialog.showOpenDialogSync({
       properties: ['openDirectory'],
-      buttonLabel: 'Open Folder',
-      title: 'Open Folder'
+      buttonLabel: 'Select Folder',
+      title: 'Select Folder'
     });
 
     if (directory.length === 0) return;

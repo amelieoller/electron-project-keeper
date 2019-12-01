@@ -103,7 +103,6 @@ const NotesWindow = ({ projectNotes, createNewFile, project }) => {
         showGutter={false}
         highlightActiveLine={true}
         value={noteContent ? noteContent : 'Loading...'}
-        height="800px"
         onBlur={saveFile}
         setOptions={{
           enableBasicAutocompletion: false,
