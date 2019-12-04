@@ -6,8 +6,10 @@ import { firestore } from '../../firebase';
 import { ReactComponent as Star } from '../../assets/icons/star.svg';
 import Footer from './Footer';
 import AdditionalInfo from './AdditionalInfo';
+import { createAbsolutePath } from '../../utils/utilities';
 
 const exec = require('child_process').exec;
+const os = require('os');
 
 const StyledProject = styled.div`
   background: ${({ theme }) => theme.transparentWhite};
@@ -146,7 +148,7 @@ const Project = ({ project, projectOpenId, setProjectOpenId, selectedSort }) => 
 
   const openFolderInEditor = () => {
     // open window in VSCOde
-    executeCommand(`code ${project.folder}`, output => {
+    executeCommand(`code ${createAbsolutePath(project.folder)}`, output => {
       console.log(output);
     });
   };

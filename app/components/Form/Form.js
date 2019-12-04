@@ -10,9 +10,11 @@ import Checkbox from '../../atoms/Checkbox/Checkbox';
 import Button from '../../atoms/Button';
 import Input from '../../atoms/Input';
 import TextNotificationWithButton from '../../molecules/TextNotificationWithButton';
+import { createAbsolutePath, createRelativePath } from '../../utils/utilities';
 
 const { remote } = window.require('electron');
 const { dialog } = remote.require('electron');
+const os = require('os');
 
 const StyledForm = styled.div`
   position: relative;
@@ -193,7 +195,7 @@ const Form = ({ existingProject, history, titleText }) => {
 
     setProject({
       ...project,
-      folder: directory[0]
+      folder: createRelativePath(directory[0])
     });
   };
 
@@ -295,7 +297,9 @@ const Form = ({ existingProject, history, titleText }) => {
           <hr />
           <TextNotificationWithButton
             text={
-              project.folder ? `Selected Folder: ${project.folder}` : 'No Folder Selected'
+              project.folder
+                ? `Selected Folder: ${createAbsolutePath(project.folder)}`
+                : 'No Folder Selected'
             }
             buttonText={project.folder ? 'Change Folder' : 'Add Folder'}
             onButtonClick={selectFolder}

@@ -8,8 +8,10 @@ import 'ace-builds/src-noconflict/mode-markdown';
 import 'ace-builds/src-noconflict/theme-github';
 
 import TextNotificationWithButton from '../../molecules/TextNotificationWithButton';
+import { createAbsolutePath } from '../../utils/utilities';
 
 const fs = require('fs');
+const os = require('os');
 
 const SyledNotesWindow = styled.div`
   display: grid;
@@ -81,7 +83,7 @@ const NotesWindow = ({ projectNotes, createNewFile, project }) => {
 
   const saveFile = () => {
     if (projectNotes !== noteContent) {
-      const filePath = `${project.folder}/NOTES.md`;
+      const filePath = `${createAbsolutePath(project.folder)}/NOTES.md`;
 
       fs.writeFile(filePath, noteContent, err => {
         if (err) return console.log(err);
@@ -92,26 +94,28 @@ const NotesWindow = ({ projectNotes, createNewFile, project }) => {
 
   return (
     <SyledNotesWindow>
-      <AceEditor
-        placeholder="Placeholder Text"
-        mode="markdown"
-        theme="github"
-        onChange={onChange}
-        name="markdown-window"
-        fontSize={14}
-        showPrintMargin={true}
-        showGutter={false}
-        highlightActiveLine={true}
-        value={noteContent ? noteContent : 'Loading...'}
-        onBlur={saveFile}
-        setOptions={{
-          enableBasicAutocompletion: false,
-          enableLiveAutocompletion: false,
-          enableSnippets: true,
-          showLineNumbers: false,
-          tabSize: 2
-        }}
-      />
+      {!!noteContent && (
+        <AceEditor
+          placeholder="Placeholder Text"
+          mode="markdown"
+          theme="github"
+          onChange={onChange}
+          name="markdown-window"
+          fontSize={14}
+          showPrintMargin={true}
+          showGutter={false}
+          highlightActiveLine={true}
+          value={noteContent}
+          onBlur={saveFile}
+          setOptions={{
+            enableBasicAutocompletion: false,
+            enableLiveAutocompletion: false,
+            enableSnippets: true,
+            showLineNumbers: false,
+            tabSize: 2
+          }}
+        />
+      )}
 
       <div className="notes">
         {!!noteContent ? (

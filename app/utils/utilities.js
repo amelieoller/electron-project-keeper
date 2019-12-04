@@ -1,3 +1,8 @@
+const os = require('os');
+
+export const createRelativePath = folderPath => folderPath.replace(os.homedir(), '');
+export const createAbsolutePath = folderPath => os.homedir() + folderPath;
+
 export const collectIdsAndData = doc => {
   return { id: doc.id, ...doc.data() };
 };

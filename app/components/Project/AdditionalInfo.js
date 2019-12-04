@@ -3,7 +3,11 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Carousel, { Modal, ModalGateway } from 'react-images';
 
-import { twoFlatArraysAreEqual } from '../../utils/utilities';
+import {
+  twoFlatArraysAreEqual,
+  createAbsolutePath,
+  createRelativePath
+} from '../../utils/utilities';
 import { firestore } from '../../firebase';
 import { ReactComponent as Plus } from '../../assets/icons/plus.svg';
 import TextNotificationWithButton from '../../molecules/TextNotificationWithButton';
@@ -98,14 +102,15 @@ const AdditionalInfo = ({
 
   const getNoteContents = () => {
     const notesFileName = 'NOTES.md';
+    const absolutePath = createAbsolutePath(project.folder);
 
-    fs.readdir(project.folder, (err, files) => {
+    fs.readdir(absolutePath, (err, files) => {
       if (files) {
         if (!files.includes(notesFileName)) {
           return;
         }
 
-        const notesPath = `${project.folder}/${notesFileName}`;
+        const notesPath = `${absolutePath}/${notesFileName}`;
         let content = fs.readFileSync(notesPath).toString();
 
         // Only update note if it has changed
@@ -123,7 +128,7 @@ const AdditionalInfo = ({
   const getImages = () => {
     const imageFolder = 'images';
 
-    fs.readdir(`${project.folder}/${imageFolder}`, (err, files) => {
+    fs.readdir(`${createAbsolutePath(project.folder)}/${imageFolder}`, (err, files) => {
       if (files) {
         const filteredImages = files.filter(
           file => file.includes('.gif') || file.includes('.png') || file.includes('.jpg')
@@ -140,7 +145,7 @@ const AdditionalInfo = ({
   };
 
   const createNewFile = () => {
-    const notesPath = `${project.folder}/NOTES.md`;
+    const notesPath = `${createAbsolutePath(project.folder)}/NOTES.md`;
 
     fs.writeFile(notesPath, '', err => {
       if (err) return console.log(err);
@@ -175,7 +180,7 @@ const AdditionalInfo = ({
     const oldPath = files[0];
     const index = oldPath.lastIndexOf('/');
     const fileName = oldPath.slice(index + 1);
-    const newPath = `${project.folder}/images/${fileName}`;
+    const newPath = `${createAbsolutePath(project.folder)}/images/${fileName}`;
 
     // Move file from original directory to new image directory
     fs.rename(oldPath, newPath, err => {
@@ -188,7 +193,7 @@ const AdditionalInfo = ({
   const addFolder = () => {
     const imageFolder = 'images';
     const projectPath = project.folder;
-    const fullImageFolderPath = `${projectPath}/${imageFolder}`;
+    const fullImageFolderPath = `${os.homedir()}${projectPath}/${imageFolder}`;
 
     if (!fs.existsSync(fullImageFolderPath)) {
       fs.mkdirSync(fullImageFolderPath);
@@ -209,7 +214,7 @@ const AdditionalInfo = ({
 
     if (directory.length === 0) return;
 
-    handleUpdate(directory[0]);
+    handleUpdate(createRelativePath(directory[0]));
   };
 
   const renderImageSection = () => (
@@ -227,7 +232,10 @@ const AdditionalInfo = ({
                 className="image-wrap"
                 onClick={() => setModalIsOpen(!modalIsOpen)}
               >
-                <img src={`${project.folder}/images/${image}`} alt="" />
+                <img
+                  src={`${createAbsolutePath(project.folder)}/images/${image}`}
+                  alt=""
+                />
               </div>
             ))}
           </AdditionalImages>
@@ -237,7 +245,7 @@ const AdditionalInfo = ({
                 <Carousel
                   views={additionalImages.map(image => {
                     return {
-                      src: `${project.folder}/images/${image}`
+                      src: `${createAbsolutePath(project.folder)}/images/${image}`
                     };
                   })}
                 />
