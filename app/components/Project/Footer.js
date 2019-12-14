@@ -1,14 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import ReactTooltip from 'react-tooltip';
 
-import { ReactComponent as Trash } from '../../assets/icons/trash.svg';
-import { ReactComponent as Edit } from '../../assets/icons/edit.svg';
-import { ReactComponent as GitHub } from '../../assets/icons/github.svg';
-import { ReactComponent as Monitor } from '../../assets/icons/monitor.svg';
-import { ReactComponent as Code } from '../../assets/icons/code.svg';
-import { ReactComponent as ChevronDown } from '../../assets/icons/chevron-down.svg';
-import { ReactComponent as ChevronUp } from '../../assets/icons/chevron-up.svg';
+import IconWithTooltip from '../../molecules/IconWithTooltip';
 
 const StyledFooter = styled.div`
   text-align: right;
@@ -16,30 +10,6 @@ const StyledFooter = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-top: 2rem;
-
-  a {
-    color: inherit;
-    margin-left: 0.8rem;
-
-    svg {
-      margin-left: 0.4rem;
-    }
-  }
-
-  svg {
-    cursor: pointer;
-    color: ${({ theme }) => theme.lightGrey};
-
-    &.active,
-    &:hover {
-      transition: all ${({ theme }) => theme.transitions.ease};
-      color: ${({ theme }) => theme.darkerGrey};
-    }
-  }
-
-  .button {
-    margin-right: 0.3rem;
-  }
 `;
 
 const Footer = ({
@@ -51,37 +21,57 @@ const Footer = ({
 }) => (
   <StyledFooter className="footer">
     {showExtraInfo ? (
-      <ChevronUp className="active" onClick={expandCard} />
+      <IconWithTooltip
+        tooltipText="Less Info"
+        iconName="chevronup"
+        onClickFunc={expandCard}
+        className="active"
+      />
     ) : (
-      <ChevronDown onClick={expandCard} />
+      <IconWithTooltip
+        tooltipText="More Info"
+        iconName="chevrondown"
+        onClickFunc={expandCard}
+      />
     )}
     <div>
       {github && (
-        <a target="_blank" rel="noopener noreferrer" href={github}>
-          <GitHub />
-        </a>
+        <IconWithTooltip
+          tooltipText="Open in GitHub"
+          iconName="github"
+          linkTo={github}
+          external
+        />
       )}
       {live && (
-        <a target="_blank" rel="noopener noreferrer" href={live}>
-          <Monitor />
-        </a>
+        <IconWithTooltip
+          tooltipText="Open Live Server"
+          iconName="monitor"
+          linkTo={live}
+          external
+        />
       )}
-      <Link to={`/projects/${id}/edit`}>
-        <Edit />
-      </Link>
+      <IconWithTooltip
+        tooltipText="Edit Project"
+        iconName="edit"
+        linkTo={`/projects/${id}/edit`}
+      />
       {folder && (
-        <a onClick={openFolderInEditor}>
-          <Code />
-        </a>
+        <IconWithTooltip
+          tooltipText="Open Folder"
+          iconName="code"
+          onClickFunc={openFolderInEditor}
+        />
       )}
-      <a
-        onClick={() => {
+      <IconWithTooltip
+        tooltipText="Delete"
+        iconName="trash"
+        onClickFunc={() => {
           if (window.confirm('Are you sure?')) handleDelete(id);
         }}
-      >
-        <Trash />
-      </a>
+      />
     </div>
+    <ReactTooltip place="bottom" type="dark" effect="solid" />
   </StyledFooter>
 );
 
