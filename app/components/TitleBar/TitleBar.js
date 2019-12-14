@@ -16,18 +16,26 @@ const StyledTitleBar = styled.div`
     right: 1.7rem;
     top: 1.7rem;
 
-    svg {
-      height: 2.5rem;
+    a {
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: ${({ theme }) => theme.primary};
 
-      path {
-        fill: ${({ theme }) => theme.primaryLight};
-      }
-
-      &:hover {
-        filter: drop-shadow(2px 2px 1px rgba(155, 67, 65, 0.15));
+      svg {
+        height: 2.3rem;
+        margin-bottom: 0.2rem;
 
         path {
           fill: ${({ theme }) => theme.primary};
+        }
+      }
+
+      &:hover {
+        color: ${({ theme }) => theme.primaryLight};
+
+        path {
+          fill: ${({ theme }) => theme.primaryLight};
         }
       }
     }

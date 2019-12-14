@@ -35,10 +35,12 @@ class App extends React.Component<Props> {
           {history.location.pathname === '/' ? (
             <Link to={routes.NEW_PROJECT}>
               <Plus />
+              Add Project
             </Link>
           ) : (
             <Link to={routes.HOME}>
               <Home />
+              Home
             </Link>
           )}
         </TitleBar>
