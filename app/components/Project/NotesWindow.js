@@ -6,6 +6,8 @@ import Markdown from 'markdown-to-jsx';
 
 import 'ace-builds/src-noconflict/mode-markdown';
 import 'ace-builds/src-noconflict/theme-github';
+import 'ace-builds/src-noconflict/ext-language_tools';
+import 'ace-builds/webpack-resolver';
 
 import TextNotificationWithButton from '../../molecules/TextNotificationWithButton';
 import { createAbsolutePath } from '../../utils/utilities';
@@ -76,21 +78,69 @@ const NotesWindow = ({ projectNotes, createNewFile, project }) => {
     setNoteContent(projectNotes);
   }, [projectNotes]);
 
+  let checkboxCounter = 0;
+
+  const InputCheckbox = ({ checked }) => {
+    checkboxCounter += 1;
+
+    return (
+      <input
+        readOnly
+        type="checkbox"
+        checked={checked}
+        id={checkboxCounter}
+        onClick={e => checkBox(e)}
+      />
+    );
+  };
+
   const onChange = newValue => {
     if (newValue !== projectNotes) {
       setNoteContent(newValue);
     }
   };
 
-  const saveFile = () => {
-    if (projectNotes !== noteContent) {
-      const filePath = `${createAbsolutePath(project.folder)}/NOTES.md`;
+  const saveFile = content => {
+    const filePath = `${createAbsolutePath(project.folder)}/NOTES.md`;
 
-      fs.writeFile(filePath, noteContent, err => {
-        if (err) return console.log(err);
-        console.log('saved');
-      });
+    fs.writeFile(filePath, content, err => {
+      if (err) return console.log(err);
+      console.log('saved');
+    });
+  };
+
+  const checkBox = e => {
+    const { tagName, id, type } = e.target;
+
+    if (tagName.toLowerCase() === 'input' && type.toLowerCase() === 'checkbox') {
+      toggleCheckbox(parseInt(id, 10));
     }
+  };
+
+  const toggleCheckbox = id => {
+    let counter = 0;
+
+    const newNoteContent = noteContent
+      .split('\n')
+      .map(input => {
+        if (input.includes('[ ]')) {
+          counter += 1;
+          if (counter === id) {
+            return input.replace('[ ]', '[x]');
+          }
+        } else if (input.includes('[x]')) {
+          counter += 1;
+          if (counter === id) {
+            return input.replace('[x]', '[ ]');
+          }
+        }
+
+        return input;
+      })
+      .join('\n');
+
+    setNoteContent(newNoteContent);
+    saveFile(newNoteContent);
   };
 
   return (
@@ -101,6 +151,7 @@ const NotesWindow = ({ projectNotes, createNewFile, project }) => {
             onDoubleClick={() => setShowEdit(true)}
             options={{
               overrides: {
+                input: InputCheckbox,
                 h1: {
                   props: {
                     className: 'h1'
@@ -159,13 +210,15 @@ const NotesWindow = ({ projectNotes, createNewFile, project }) => {
             onChange={onChange}
             name="markdown-window"
             fontSize={14}
+            focus={true}
+            wrapEnabled={true}
             showPrintMargin={false}
             showGutter={false}
             highlightActiveLine={true}
             value={noteContent}
             width="100%"
             onBlur={() => {
-              saveFile();
+              projectNotes !== noteContent && saveFile(noteContent);
               setShowEdit(false);
             }}
             setOptions={{

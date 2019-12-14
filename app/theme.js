@@ -2,7 +2,7 @@ const theme = {
   mainBackground: 'white',
   primary: '#776eff',
   primaryDark: '#675dfc',
-  primaryLight: '#CAC6FF',
+  primaryLight: '#a5a0fb',
   primaryBackground: '#ff9a9a',
   text: '#50514f',
   textDark: '#323C47',

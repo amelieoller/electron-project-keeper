@@ -36,7 +36,7 @@ Badge.defaultProps = {
 Badge.propTypes = {
   badgeText: PropTypes.string.isRequired,
   handleSelect: PropTypes.func.isRequired,
-  isSelected: PropTypes.bool,
+  isSelected: PropTypes.bool.isRequired,
   className: PropTypes.string
 };
 
