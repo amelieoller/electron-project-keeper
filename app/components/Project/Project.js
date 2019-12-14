@@ -9,7 +9,7 @@ import AdditionalInfo from './AdditionalInfo';
 import { createAbsolutePath } from '../../utils/utilities';
 
 const exec = require('child_process').exec;
-const os = require('os');
+const fixPath = require('fix-path');
 
 const StyledProject = styled.div`
   background: ${({ theme }) => theme.transparentWhite};
@@ -41,7 +41,7 @@ const StyledStar = styled.span`
   cursor: pointer;
 
   path {
-    color: ${({ theme }) => theme.lightGrey};
+    color: ${({ theme }) => theme.primary};
     color: ${props => props.starred && props.theme.primary} !important;
     fill: ${props => (props.starred ? props.theme.primary : 'transparent')};
   }
@@ -147,9 +147,14 @@ const Project = ({ project, projectOpenId, setProjectOpenId, selectedSort }) => 
   };
 
   const openFolderInEditor = () => {
+    // Fix path for production environment
+    fixPath();
+    // console.log(process.env.PATH);
+
     // open window in VSCOde
     executeCommand(`code ${createAbsolutePath(project.folder)}`, output => {
       console.log(output);
+      // node --inspect-brk
     });
   };
 
