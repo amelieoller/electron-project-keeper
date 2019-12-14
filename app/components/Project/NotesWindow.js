@@ -11,12 +11,8 @@ import TextNotificationWithButton from '../../molecules/TextNotificationWithButt
 import { createAbsolutePath } from '../../utils/utilities';
 
 const fs = require('fs');
-const os = require('os');
 
 const SyledNotesWindow = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-
   .h1,
   .h2,
   .h3,
@@ -63,6 +59,10 @@ const SyledNotesWindow = styled.div`
     }
   }
 
+  .ace-github.ace_focus .ace_marker-layer .ace_active-line {
+    background: ${({ theme }) => theme.primaryBackground};
+  }
+
   .ul {
     font-size: 1.4rem;
   }
@@ -70,6 +70,7 @@ const SyledNotesWindow = styled.div`
 
 const NotesWindow = ({ projectNotes, createNewFile, project }) => {
   const [noteContent, setNoteContent] = useState(projectNotes);
+  const [showEdit, setShowEdit] = useState(false);
 
   useEffect(() => {
     setNoteContent(projectNotes);
@@ -94,32 +95,10 @@ const NotesWindow = ({ projectNotes, createNewFile, project }) => {
 
   return (
     <SyledNotesWindow>
-      {!!noteContent && (
-        <AceEditor
-          placeholder="Placeholder Text"
-          mode="markdown"
-          theme="github"
-          onChange={onChange}
-          name="markdown-window"
-          fontSize={14}
-          showPrintMargin={true}
-          showGutter={false}
-          highlightActiveLine={true}
-          value={noteContent}
-          onBlur={saveFile}
-          setOptions={{
-            enableBasicAutocompletion: false,
-            enableLiveAutocompletion: false,
-            enableSnippets: true,
-            showLineNumbers: false,
-            tabSize: 2
-          }}
-        />
-      )}
-
-      <div className="notes">
-        {!!noteContent ? (
+      {!!noteContent ? (
+        !showEdit ? (
           <Markdown
+            onDoubleClick={() => setShowEdit(true)}
             options={{
               overrides: {
                 h1: {
@@ -173,13 +152,39 @@ const NotesWindow = ({ projectNotes, createNewFile, project }) => {
             {noteContent}
           </Markdown>
         ) : (
-          <TextNotificationWithButton
-            text="You Have No Notes File for This Project."
-            buttonText="Add NOTES.md File"
-            onButtonClick={createNewFile}
+          <AceEditor
+            placeholder="Placeholder Text"
+            mode="markdown"
+            theme="github"
+            onChange={onChange}
+            name="markdown-window"
+            fontSize={14}
+            showPrintMargin={false}
+            showGutter={false}
+            highlightActiveLine={true}
+            value={noteContent}
+            width="100%"
+            onBlur={() => {
+              saveFile();
+              setShowEdit(false);
+            }}
+            setOptions={{
+              enableBasicAutocompletion: false,
+              enableLiveAutocompletion: true,
+              enableSnippets: true,
+              showLineNumbers: false,
+              tabSize: 2
+            }}
           />
-        )}
-      </div>
+        )
+      ) : (
+        <TextNotificationWithButton
+          text="You Have No Notes File for This Project."
+          buttonText="Add NOTES.md File"
+          onButtonClick={createNewFile}
+        />
+      )}
+      {/* <div className="notes"> </div> */}
     </SyledNotesWindow>
   );
 };
