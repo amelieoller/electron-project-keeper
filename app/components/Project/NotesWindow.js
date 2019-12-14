@@ -10,11 +10,18 @@ import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/webpack-resolver';
 
 import TextNotificationWithButton from '../../molecules/TextNotificationWithButton';
+import Button from '../../atoms/Button';
 import { createAbsolutePath } from '../../utils/utilities';
 
 const fs = require('fs');
 
 const SyledNotesWindow = styled.div`
+  position: relative;
+
+  .markdown-window > *:first-child {
+    margin-top: 0;
+  }
+
   .h1,
   .h2,
   .h3,
@@ -68,14 +75,32 @@ const SyledNotesWindow = styled.div`
   .ul {
     font-size: 1.4rem;
   }
+
+  .info-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    max-width: min-content;
+
+    button {
+      float: right;
+      margin-bottom: 0.3rem;
+    }
+
+    .info {
+      color: ${({ theme }) => theme.darkerGrey};
+    }
+  }
 `;
 
 const NotesWindow = ({ projectNotes, createNewFile, project }) => {
+  const [updatedNoteContent, setUpdatedNoteContent] = useState(projectNotes);
   const [noteContent, setNoteContent] = useState(projectNotes);
   const [showEdit, setShowEdit] = useState(false);
 
   useEffect(() => {
     setNoteContent(projectNotes);
+    setUpdatedNoteContent(projectNotes);
   }, [projectNotes]);
 
   let checkboxCounter = 0;
@@ -95,13 +120,14 @@ const NotesWindow = ({ projectNotes, createNewFile, project }) => {
   };
 
   const onChange = newValue => {
-    if (newValue !== projectNotes) {
+    if (newValue !== updatedNoteContent) {
       setNoteContent(newValue);
     }
   };
 
   const saveFile = content => {
     const filePath = `${createAbsolutePath(project.folder)}/NOTES.md`;
+    setUpdatedNoteContent(content);
 
     fs.writeFile(filePath, content, err => {
       if (err) return console.log(err);
@@ -147,88 +173,127 @@ const NotesWindow = ({ projectNotes, createNewFile, project }) => {
     <SyledNotesWindow>
       {!!noteContent ? (
         !showEdit ? (
-          <Markdown
-            onDoubleClick={() => setShowEdit(true)}
-            options={{
-              overrides: {
-                input: InputCheckbox,
-                h1: {
-                  props: {
-                    className: 'h1'
-                  }
-                },
-                h2: {
-                  props: {
-                    className: 'h2'
-                  }
-                },
-                h3: {
-                  props: {
-                    className: 'h3'
-                  }
-                },
-                h4: {
-                  props: {
-                    className: 'h4'
-                  }
-                },
-                h5: {
-                  props: {
-                    className: 'h5'
-                  }
-                },
-                h6: {
-                  props: {
-                    className: 'h6'
-                  }
-                },
-                p: {
-                  props: {
-                    className: 'p'
-                  }
-                },
-                a: {
-                  props: {
-                    className: 'a'
-                  }
-                },
-                ul: {
-                  props: {
-                    className: 'ul'
+          <>
+            <Markdown
+              onDoubleClick={() => setShowEdit(true)}
+              className="markdown-window"
+              options={{
+                overrides: {
+                  input: InputCheckbox,
+                  h1: {
+                    props: {
+                      className: 'h1'
+                    }
+                  },
+                  h2: {
+                    props: {
+                      className: 'h2'
+                    }
+                  },
+                  h3: {
+                    props: {
+                      className: 'h3'
+                    }
+                  },
+                  h4: {
+                    props: {
+                      className: 'h4'
+                    }
+                  },
+                  h5: {
+                    props: {
+                      className: 'h5'
+                    }
+                  },
+                  h6: {
+                    props: {
+                      className: 'h6'
+                    }
+                  },
+                  p: {
+                    props: {
+                      className: 'p'
+                    }
+                  },
+                  a: {
+                    props: {
+                      className: 'a'
+                    }
+                  },
+                  ul: {
+                    props: {
+                      className: 'ul'
+                    }
                   }
                 }
-              }
-            }}
-          >
-            {noteContent}
-          </Markdown>
+              }}
+            >
+              {noteContent}
+            </Markdown>
+            <span className="info-button">
+              <Button
+                type="button"
+                onClick={() => {
+                  setShowEdit(true);
+                }}
+              >
+                Edit
+              </Button>
+              <span className="info">*or double click on note</span>
+            </span>
+          </>
         ) : (
-          <AceEditor
-            placeholder="Placeholder Text"
-            mode="markdown"
-            theme="github"
-            onChange={onChange}
-            name="markdown-window"
-            fontSize={14}
-            focus={true}
-            wrapEnabled={true}
-            showPrintMargin={false}
-            showGutter={false}
-            highlightActiveLine={true}
-            value={noteContent}
-            width="100%"
-            onBlur={() => {
-              projectNotes !== noteContent && saveFile(noteContent);
-              setShowEdit(false);
-            }}
-            setOptions={{
-              enableBasicAutocompletion: false,
-              enableLiveAutocompletion: true,
-              enableSnippets: true,
-              showLineNumbers: false,
-              tabSize: 2
-            }}
-          />
+          <>
+            <AceEditor
+              placeholder="Placeholder Text"
+              mode="markdown"
+              theme="github"
+              onChange={onChange}
+              name="markdown-window"
+              fontSize={14}
+              focus={true}
+              wrapEnabled={true}
+              showPrintMargin={false}
+              showGutter={false}
+              highlightActiveLine={true}
+              value={noteContent}
+              width="100%"
+              onBlur={() => {
+                updatedNoteContent !== noteContent && saveFile(noteContent);
+                setShowEdit(false);
+              }}
+              setOptions={{
+                enableBasicAutocompletion: false,
+                enableLiveAutocompletion: true,
+                enableSnippets: true,
+                showLineNumbers: false,
+                tabSize: 2
+              }}
+            />
+            {updatedNoteContent !== noteContent ? (
+              <span className="info-button">
+                <Button
+                  type="button"
+                  onClick={() => {
+                    saveFile(noteContent);
+                  }}
+                >
+                  Save
+                </Button>
+                <span className="info">*or click outside note</span>
+              </span>
+            ) : (
+              <Button
+                type="button"
+                className="info-button"
+                onClick={() => {
+                  setShowEdit(false);
+                }}
+              >
+                Back
+              </Button>
+            )}
+          </>
         )
       ) : (
         <TextNotificationWithButton
@@ -237,7 +302,6 @@ const NotesWindow = ({ projectNotes, createNewFile, project }) => {
           onButtonClick={createNewFile}
         />
       )}
-      {/* <div className="notes"> </div> */}
     </SyledNotesWindow>
   );
 };
