@@ -28,20 +28,6 @@ body {
   min-height: 100vh;
 }
 
-#background {
-  position: absolute;
-  background-image: url('./assets/images/background.png');
-  height: 430px;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  z-index: -1;
-  background-position: center bottom;
-  background-size: cover;
-  background-repeat-y: no-repeat;
-  background-repeat-x: repeat;
-}
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
@@ -85,12 +71,3 @@ button,
 textarea {
   -webkit-app-region: no-drag;
 }
-
-/* h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  -webkit-user-select: none;
-} */
