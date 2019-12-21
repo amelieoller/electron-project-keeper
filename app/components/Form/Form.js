@@ -3,26 +3,24 @@ import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 
 import { firestore } from '../../firebase';
-import { TagsContext } from '../../providers/TagsProvider';
 import { ReactComponent as Check } from '../../assets/icons/check.svg';
-import { ReactComponent as X } from '../../assets/icons/x.svg';
-import Checkbox from '../../atoms/Checkbox/Checkbox';
 import Button from '../../atoms/Button';
 import Input from '../../atoms/Input';
 import TextNotificationWithButton from '../../molecules/TextNotificationWithButton';
 import { createAbsolutePath, createRelativePath } from '../../utils/utilities';
+import withUser from '../withUser';
+import Tags from './Tags';
 
 const { remote } = window.require('electron');
 const { dialog } = remote.require('electron');
-const os = require('os');
 
 const StyledForm = styled.div`
   position: relative;
   max-width: 95rem;
-  margin: 5em auto;
+  margin: 0 auto;
   background: ${({ theme }) => theme.transparentWhite};
   width: 100%;
-  padding: 11rem 9rem;
+  padding: 6rem;
   border: ${({ theme }) => theme.border};
   border-radius: ${({ theme }) => theme.sizes.borderRadius};
 
@@ -61,57 +59,6 @@ const StyledForm = styled.div`
     margin-bottom: 0.4rem;
   }
 
-  .tag-wrapper {
-    display: inline-block;
-
-    .delete-tag {
-      width: 9px;
-      position: relative;
-      cursor: pointer;
-      display: inline-block;
-
-      svg {
-        display: none;
-        position: absolute;
-        left: -10px;
-        bottom: -5px;
-        color: ${({ theme }) => theme.lightGrey};
-      }
-
-      &:hover svg {
-        color: ${({ theme }) => theme.primaryBackground};
-      }
-    }
-
-    &:hover .delete-tag svg {
-      display: inline-block;
-    }
-  }
-
-  .new-tag-form {
-    display: grid;
-    align-items: flex-end;
-    grid-template-columns: 2fr 1fr;
-
-    .new-tag-form-group {
-      margin-right: 1.5rem;
-      margin-bottom: 0;
-
-      input {
-        font-size: 1.3rem;
-        padding: 0.7rem 1.1rem;
-      }
-    }
-
-    button {
-      font-size: 1.3rem;
-      white-space: nowrap;
-      padding: 0.7rem 1.4rem;
-      text-align: center;
-      display: inline-block;
-    }
-  }
-
   .footer {
     grid-column: span 2;
 
@@ -121,44 +68,26 @@ const StyledForm = styled.div`
   }
 `;
 
-const Form = ({ existingProject, history, titleText }) => {
-  const { tags } = useContext(TagsContext);
+const Form = ({ existingProject, history, titleText, user }) => {
   const initialProjectState = {
     title: '',
     description: '',
     github: '',
     folder: '',
     image: '',
+    additionalImage: '',
+    server: '',
     live: '',
     tags: [],
-    updated: new Date()
+    updated: new Date(),
+    userUid: user.uid
   };
 
   const [project, setProject] = useState(initialProjectState);
-  const [newTag, setNewTag] = useState('');
 
   useEffect(() => {
     !!existingProject && setProject({ ...initialProjectState, ...existingProject });
   }, [existingProject]);
-
-  const handleTagSelect = e => {
-    const { name } = e.target;
-    let newTags;
-
-    if (project.tags.includes(name)) {
-      const index = project.tags.indexOf(name);
-      if (index !== -1) {
-        newTags = project.tags.filter(t => t !== name);
-      }
-    } else {
-      newTags = [...project.tags, name];
-    }
-
-    setProject({
-      ...project,
-      tags: newTags
-    });
-  };
 
   const handleChange = event => {
     const { name, value } = event.target;
@@ -176,12 +105,15 @@ const Form = ({ existingProject, history, titleText }) => {
   };
 
   const handleCreate = () => {
-    firestore.collection('projects').add(project);
+    firestore.collection(`users/${user.uid}/projects`).add(project);
   };
 
   const handleUpdate = () => {
     const updated = new Date();
-    firestore.doc(`projects/${project.id}`).update({ ...project, updated });
+
+    firestore
+      .doc(`users/${user.uid}/projects/${project.id}`)
+      .update({ ...project, updated });
   };
 
   const selectFolder = () => {
@@ -197,15 +129,6 @@ const Form = ({ existingProject, history, titleText }) => {
       ...project,
       folder: createRelativePath(directory[0])
     });
-  };
-
-  const handleTagCreation = () => {
-    firestore.collection('tags').add({ name: newTag });
-    setNewTag('');
-  };
-
-  const handleDeleteTag = tagId => {
-    firestore.doc(`tags/${tagId}`).delete();
   };
 
   return (
@@ -254,44 +177,8 @@ const Form = ({ existingProject, history, titleText }) => {
             type="text"
           />
         </div>
-        <div className="checkboxes">
-          <div className="input-label">Tags</div>
-          {tags &&
-            tags.map(tag => (
-              <div className="tag-wrapper" key={tag.id}>
-                <Checkbox
-                  label={tag.name}
-                  checked={project.tags.includes(tag.name)}
-                  onChange={handleTagSelect}
-                  name={tag.name}
-                />
-                <span
-                  className="delete-tag"
-                  onClick={() => {
-                    if (window.confirm('Are you sure?')) handleDeleteTag(tag.id);
-                  }}
-                >
-                  <X />
-                </span>
-              </div>
-            ))}
 
-          <div className="new-tag-form">
-            <Input
-              onChange={e => setNewTag(e.target.value)}
-              onKeyDown={e => e.keyCode === 13 && handleTagCreation}
-              value={newTag}
-              name="newTag"
-              placeholder="New Tag Name"
-              title="New Tag"
-              type="text"
-              className="new-tag-form-group"
-            />
-            <Button type="button" onClick={handleTagCreation}>
-              Create Tag
-            </Button>
-          </div>
-        </div>
+        <Tags project={project} setProject={setProject} user={user} />
 
         <div className="footer">
           <hr />
@@ -317,4 +204,4 @@ const Form = ({ existingProject, history, titleText }) => {
   );
 };
 
-export default withRouter(Form);
+export default withUser(withRouter(Form));
