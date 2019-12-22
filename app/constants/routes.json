@@ -1,5 +1,6 @@
 {
   "HOME": "/",
   "NEW_PROJECT": "/new-project",
-  "EDIT_PROJECT": "/projects/:projectId/edit"
+  "EDIT_PROJECT": "/projects/:projectId/edit",
+  "USER": "/:userUid"
 }
