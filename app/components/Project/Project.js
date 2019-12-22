@@ -7,7 +7,7 @@ import { ReactComponent as Star } from '../../assets/icons/star.svg';
 import Footer from './Footer';
 import AdditionalInfo from './AdditionalInfo';
 import { createAbsolutePath } from '../../utils/utilities';
-import withUser from '../withUser';
+import withUser from '../../hocs/withUser';
 
 const exec = require('child_process').exec;
 const fixPath = require('fix-path');

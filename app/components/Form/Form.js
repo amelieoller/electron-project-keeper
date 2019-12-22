@@ -8,7 +8,7 @@ import Button from '../../atoms/Button';
 import Input from '../../atoms/Input';
 import TextNotificationWithButton from '../../molecules/TextNotificationWithButton';
 import { createAbsolutePath, createRelativePath } from '../../utils/utilities';
-import withUser from '../withUser';
+import withUser from '../../hocs/withUser';
 import Tags from './Tags';
 
 const { remote } = window.require('electron');

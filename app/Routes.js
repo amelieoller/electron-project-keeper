@@ -6,7 +6,7 @@ import App from './containers/App';
 import Home from './containers/Home';
 import NewProject from './components/NewProject';
 import EditProject from './components/EditProject';
-import withUser from './components/withUser';
+import withUser from './hocs/withUser';
 import Login from './components/Login';
 
 class Routes extends Component {

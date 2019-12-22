@@ -1,6 +1,6 @@
 import React from 'react';
 
-import withUser from '../withUser';
+import withUser from '../../hocs/withUser';
 import Loading from '../../atoms/Loading';
 import Routes from '../../Routes';
 

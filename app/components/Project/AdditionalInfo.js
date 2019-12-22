@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 import Carousel, { Modal, ModalGateway } from 'react-images';
-import withUser from '../withUser'
+import withUser from '../../hocs/withUser'
 
 import {
   twoFlatArraysAreEqual,

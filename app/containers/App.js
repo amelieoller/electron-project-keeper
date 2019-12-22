@@ -10,7 +10,7 @@ import { ReactComponent as Login } from '../assets/icons/log-in.svg';
 import { signOut } from '../firebase';
 
 import TitleBar from '../components/TitleBar';
-import withUser from '../components/withUser';
+import withUser from '../hocs/withUser';
 
 const StyledApp = styled.div`
   padding: 2rem 8rem 8rem 8rem;

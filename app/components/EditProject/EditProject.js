@@ -5,7 +5,7 @@ import { firestore } from '../../firebase';
 import { collectIdsAndData } from '../../utils/utilities';
 import Form from '../Form';
 import Loading from '../../atoms/Loading';
-import withUser from '../withUser';
+import withUser from '../../hocs/withUser';
 
 const StyledEditProject = styled.div``;
 
