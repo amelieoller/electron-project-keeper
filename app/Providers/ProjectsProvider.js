@@ -1,28 +1,66 @@
-import React, { Component, createContext } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
 
-import { firestore } from '../firebase';
+import { auth, createUserProfileDocument, firestore } from '../firebase';
 import { collectIdsAndData } from '../utils/utilities';
 
 export const ProjectsContext = createContext();
 
-class ProjectsProvider extends Component {
-  state = { projects: [], filter: { tags: [] }, sortBy: 'starred' };
+const ProjectsProvider = ({ children }) => {
+  const [projects, setProjects] = useState(null);
+  const [filter, setFilter] = useState({ tags: [] });
+  const [sortBy, setSortBy] = useState('starred');
+  const [user, setUser] = useState(null);
+  const [tags, setTags] = useState(null);
 
-  unsubscribe = null;
+  useEffect(() => {
+    let unsubscribeFromAuth = null;
 
-  componentDidMount = () => {
-    this.unsubscribe = firestore.collection('projects').onSnapshot(snapshot => {
-      const projects = snapshot.docs.map(collectIdsAndData);
-      this.setState({ projects });
+    unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      const user = await createUserProfileDocument(userAuth);
+
+      setUser(user);
     });
-  };
 
-  componentWillUnmount = () => {
-    this.unsubscribe();
-  };
+    return () => {
+      unsubscribeFromAuth && unsubscribeFromAuth();
+    };
+  }, []);
 
-  updateFilter = (type, selectedItem) => {
-    const { filter } = this.state;
+  useEffect(() => {
+    let unsubscribeFromProjects = null;
+    let unsubscribeFromTags = null;
+
+    if (!!user) {
+      // Get projects for this user
+      unsubscribeFromProjects = firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('projects')
+        .onSnapshot(snapshot => {
+          const projects = snapshot.docs.map(collectIdsAndData);
+          setProjects(projects);
+        });
+
+      // Get tags for this user
+      unsubscribeFromTags = firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('tags')
+        .orderBy('name', 'asc')
+        .onSnapshot(snapshot => {
+          const tags = snapshot.docs.map(collectIdsAndData);
+          setTags(tags);
+        });
+    }
+
+    return () => {
+      unsubscribeFromProjects && unsubscribeFromProjects();
+      unsubscribeFromTags && unsubscribeFromTags();
+    };
+  }, [user]);
+
+  const updateFilter = (type, selectedItem) => {
     let newItems;
 
     if (filter[type].includes(selectedItem)) {
@@ -34,28 +72,15 @@ class ProjectsProvider extends Component {
       newItems = [...filter[type], selectedItem];
     }
 
-    this.setState({
-      filter: { [type]: newItems }
-    });
+    setFilter({ [type]: newItems });
   };
 
-  updateSort = toSortBy => {
-    this.setState({
-      sortBy: toSortBy
-    });
+  const updateSort = toSortBy => {
+    setSortBy(toSortBy);
   };
 
-  static applyFilterAndSort(projects, filter, sortBy) {
-    let filteredAndSortedProjects;
-
-    // Filter
-    if (filter.tags.length === 0) {
-      filteredAndSortedProjects = projects;
-    } else {
-      filteredAndSortedProjects = projects.filter(r =>
-        filter.tags.every(tag => -1 !== r.tags.indexOf(tag))
-      );
-    }
+  const applyFilterAndSort = (projects, filter, sortBy) => {
+    let filteredAndSortedProjects = projects;
 
     // Sort
     if (sortBy === 'name') {
@@ -77,33 +102,33 @@ class ProjectsProvider extends Component {
       });
     }
 
+    // Filter
+    if (filter.tags.length !== 0) {
+      filteredAndSortedProjects = projects.filter(r =>
+        filter.tags.every(tag => -1 !== r.tags.indexOf(tag))
+      );
+    }
+
     return filteredAndSortedProjects;
-  }
+  };
 
-  render() {
-    const { projects, filter, sortBy } = this.state;
-    const { children } = this.props;
+  const filteredProjects = projects && applyFilterAndSort(projects, filter, sortBy);
 
-    const filteredProjects = ProjectsProvider.applyFilterAndSort(
-      projects,
-      filter,
-      sortBy
-    );
+  return (
+    <ProjectsContext.Provider
+      value={{
+        projects: filteredProjects,
+        updateFilter: updateFilter,
+        updateSort: updateSort,
+        selectedSort: sortBy,
+        user,
+        filter,
+        tags
+      }}
+    >
+      {children}
+    </ProjectsContext.Provider>
+  );
+};
 
-    return (
-      <ProjectsContext.Provider
-        value={{
-          projects: filteredProjects,
-          updateFilter: this.updateFilter,
-          updateSort: this.updateSort,
-          selectedSort: sortBy,
-          filter
-        }}
-      >
-        {children}
-      </ProjectsContext.Provider>
-    );
-  }
-}
-
-export default ProjectsProvider;
+export default withRouter(ProjectsProvider);
