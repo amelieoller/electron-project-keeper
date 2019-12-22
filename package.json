@@ -270,6 +270,11 @@
     "source-map-support": "^0.5.16",
     "styled-components": "^4.4.1"
   },
+  "peerDependencies": {
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0",
+    "styled-components": "^4.4.1"
+  },
   "devEngines": {
     "node": ">=7.x",
     "npm": ">=4.x",
@@ -278,5 +283,13 @@
   "collective": {
     "url": "https://opencollective.com/electron-react-boilerplate-594"
   },
-  "browserslist": "electron 1.6"
+  "browserslist": "electron 1.6",
+  "bit": {
+    "env": {},
+    "componentsDefaultDirectory": "app/{name}",
+    "packageManager": "yarn",
+    "overrides": {
+      "amelieoller.project-keeper/button": {}
+    }
+  }
 }
