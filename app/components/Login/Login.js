@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
+import styled from 'styled-components';
 
 import {
   signUpWithUsernameAndPassword,
   signInWithUsernameAndPassword
 } from '../../firebase';
 import Button from '../../atoms/Button';
-import styled from 'styled-components';
 import Input from '../../atoms/Input';
+import withError from '../../hocs/withError';
 
 const StyledLogin = styled.div`
   max-width: 65rem;
@@ -50,7 +51,14 @@ const StyledLogin = styled.div`
   }
 `;
 
-const Login = () => {
+const StyledError = styled.div`
+  color: ${({ theme }) => theme.primaryBackground};
+  text-align: center;
+  font-style: italic;
+  font-size: 1.2rem;
+`;
+
+const Login = ({ setError, error }) => {
   const [login, setLogin] = useState({ email: '', password: '' });
 
   const handleChange = e => {
@@ -62,20 +70,21 @@ const Login = () => {
     e.preventDefault();
     const { email, password } = login;
 
-    signUpWithUsernameAndPassword(email, password);
+    signUpWithUsernameAndPassword(email, password, setError);
   };
 
   const handleSignIn = async e => {
     e.preventDefault();
     const { email, password } = login;
 
-    signInWithUsernameAndPassword(email, password);
+    signInWithUsernameAndPassword(email, password, setError);
   };
 
   return (
     <StyledLogin>
-      <div className="form-wrapper">
+      <form className="form-wrapper" onSubmit={handleSignIn}>
         <h1>Login</h1>
+        <StyledError>{error && error.message}</StyledError>
         <Input
           type="text"
           placeholder="Email"
@@ -91,13 +100,12 @@ const Login = () => {
           name="password"
           value={login.password}
           title="Password"
-          onKeyDown={e => e.keyCode === 13 && handleSignIn(e)}
         />
         <div className="button-wrapper">
           <Button onClick={handleSignIn}>Log In</Button>
           <Button onClick={handleSignUp}>Sign Up</Button>
         </div>
-      </div>
+      </form>
       {/* <div className="form-wrapper">
         <Button onClick={signInWithGoogle}>Login with Google</Button>
       </div> */}
@@ -105,4 +113,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default withError(Login);

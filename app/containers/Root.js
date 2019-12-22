@@ -5,6 +5,7 @@ import { ThemeProvider } from 'styled-components';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import UserProvider from '../providers/UserProvider';
+import ErrorProvider from '../providers/ErrorProvider';
 import theme from '../theme';
 import Authentication from '../components/Authentication';
 
@@ -12,11 +13,13 @@ const Root = ({ store, history }) => (
   <Router>
     <ThemeProvider theme={theme}>
       <UserProvider>
-        <Provider store={store}>
-          <ConnectedRouter history={history}>
-            <Authentication />
-          </ConnectedRouter>
-        </Provider>
+        <ErrorProvider>
+          <Provider store={store}>
+            <ConnectedRouter history={history}>
+              <Authentication />
+            </ConnectedRouter>
+          </Provider>
+        </ErrorProvider>
       </UserProvider>
     </ThemeProvider>
   </Router>

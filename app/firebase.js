@@ -19,17 +19,39 @@ export const auth = firebase.auth();
 
 export const provider = new firebase.auth.GoogleAuthProvider();
 
-export const signUpWithUsernameAndPassword = (email, password) =>
-  auth.createUserWithEmailAndPassword(email, password).catch(function(error) {
-    // Handle Errors here.
-    console.log(error);
-  });
+export const signUpWithUsernameAndPassword = (email, password, setError) =>
+  auth
+    .createUserWithEmailAndPassword(email, password)
+    .then(() => {
+      setError(null);
 
-export const signInWithUsernameAndPassword = (email, password) =>
-  auth.signInWithEmailAndPassword(email, password).catch(function(error) {
-    // Handle Errors here.
-    console.log(error);
-  });
+      var credential = firebase.auth.EmailAuthProvider.credential(email, password);
+      firebase
+        .auth()
+        .currentUser.linkWithCredential(credential)
+        .then(
+          function(usercred) {
+            var user = usercred.user;
+            console.log('Account linking success', user);
+          },
+          function(error) {
+            console.log('Account linking error', error);
+          }
+        );
+    })
+    .catch(function(error) {
+      setError(error);
+    });
+
+export const signInWithUsernameAndPassword = (email, password, setError) =>
+  auth
+    .signInWithEmailAndPassword(email, password)
+    .then(() => {
+      setError(null);
+    })
+    .catch(function(error) {
+      setError(error);
+    });
 
 export const signOut = () => auth.signOut();
 
