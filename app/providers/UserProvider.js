@@ -114,6 +114,14 @@ const UserProvider = ({ children }) => {
 
   const filteredProjects = projects && applyFilterAndSort(projects, filter, sortBy);
 
+  const clearContext = () => {
+    setProjects(null);
+    setFilter({ tags: [] });
+    setSortBy('starred');
+    setUser(null);
+    setTags(null);
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -121,6 +129,7 @@ const UserProvider = ({ children }) => {
         updateFilter: updateFilter,
         updateSort: updateSort,
         selectedSort: sortBy,
+        clearContext,
         user,
         filter,
         tags

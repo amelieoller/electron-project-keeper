@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { withRouter, Link } from 'react-router-dom';
 
@@ -11,6 +11,7 @@ import { signOut } from '../firebase';
 
 import TitleBar from '../components/TitleBar';
 import withUser from '../hocs/withUser';
+import { UserContext } from '../providers/UserProvider';
 
 const StyledApp = styled.div`
   padding: 2rem 8rem 8rem 8rem;
@@ -30,46 +31,49 @@ const StyledBackground = styled.img`
   z-index: -1;
 `;
 
-class App extends Component {
-  render() {
-    const { children, history, user } = this.props;
+const App = ({ children, history, user }) => {
+  const { clearContext } = useContext(UserContext);
 
-    return (
-      <>
-        {!!user ? (
-          <TitleBar>
-            <a onClick={signOut}>
-              <SignOut />
-              Sign Out
-            </a>
+  const signUserOut = () => {
+    clearContext();
+    signOut();
+  };
 
-            {history.location.pathname === routes.HOME ? (
-              <Link to={routes.NEW_PROJECT}>
-                <Plus />
-                Add Project
-              </Link>
-            ) : (
-              <Link to={routes.HOME}>
-                <Home />
-                Home
-              </Link>
-            )}
-          </TitleBar>
-        ) : (
-          <TitleBar>
-            {history.location.pathname !== routes.HOME && (
-              <Link to={routes.HOME}>
-                <Login />
-                Login
-              </Link>
-            )}
-          </TitleBar>
-        )}
-        <StyledApp>{children}</StyledApp>
-        <StyledBackground src="https://res.cloudinary.com/dpekucrvb/image/upload/v1576570220/Artboard_4_4x.png"></StyledBackground>
-      </>
-    );
-  }
-}
+  return (
+    <>
+      {!!user ? (
+        <TitleBar>
+          <a onClick={signUserOut}>
+            <SignOut />
+            Sign Out
+          </a>
+
+          {history.location.pathname === routes.HOME ? (
+            <Link to={routes.NEW_PROJECT}>
+              <Plus />
+              Add Project
+            </Link>
+          ) : (
+            <Link to={routes.HOME}>
+              <Home />
+              Home
+            </Link>
+          )}
+        </TitleBar>
+      ) : (
+        <TitleBar>
+          {history.location.pathname !== routes.HOME && (
+            <Link to={routes.HOME}>
+              <Login />
+              Login
+            </Link>
+          )}
+        </TitleBar>
+      )}
+      <StyledApp>{children}</StyledApp>
+      <StyledBackground src="https://res.cloudinary.com/dpekucrvb/image/upload/v1576570220/Artboard_4_4x.png"></StyledBackground>
+    </>
+  );
+};
 
 export default withUser(withRouter(App));
