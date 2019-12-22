@@ -8,34 +8,33 @@ import { ReactComponent as ChevronDown } from '../../assets/icons/chevron-down.s
 import { ReactComponent as ChevronUp } from '../../assets/icons/chevron-up.svg';
 
 const StyledDropdown = styled.span`
-  display: flex;
-  align-items: center;
-
   .root {
     position: relative;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
+    margin-top: 0.4rem;
+    font-weight: 300;
   }
 
   .control {
     position: relative;
     overflow: hidden;
-    border: 1px solid ${({ theme }) => theme.primary};
+    border: 1px solid ${({ theme }) => theme.borderColor};
     border-radius: ${({ theme }) => theme.sizes.borderRadius};
     box-sizing: border-box;
     color: ${({ theme }) => theme.darkerGrey};
     outline: none;
     transition: all 200ms ease;
-    padding: 0.2rem 3.5rem 0.2rem 1rem;
     background: ${({ theme }) => theme.lightestGrey};
     cursor: pointer;
+    padding: 0.8rem 1.1rem;
+    min-width: 16rem;
   }
 
   .menu {
     background-color: white;
     border: 1px solid ${({ theme }) => theme.borderColor};
+    border-top-width: 0;
     box-sizing: border-box;
-    margin-top: 3px;
-    border-radius: ${({ theme }) => theme.sizes.borderRadius};
     max-height: 200px;
     overflow-y: auto;
     position: absolute;
@@ -53,7 +52,9 @@ const StyledDropdown = styled.span`
       color: ${({ theme }) => theme.text};
       cursor: pointer;
       display: block;
-      padding: 0.5rem 1rem;
+      padding: 0.8rem 1.1rem;
+
+      font-size: 1.3rem;
 
       &:hover {
         background: ${({ theme }) => theme.primary};
@@ -65,7 +66,8 @@ const StyledDropdown = styled.span`
   .arrow {
     position: absolute;
     right: 5px;
-    top: 0;
+    top: 3px;
+    width: 20px;
   }
 `;
 

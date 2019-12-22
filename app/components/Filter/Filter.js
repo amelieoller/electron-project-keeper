@@ -1,18 +1,19 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
-import { TagsContext } from '../../providers/TagsProvider';
-import { ProjectsContext } from '../../providers/ProjectsProvider';
-import Badge from '../../atoms/Badge/Badge';
 import MyDropdown from '../../atoms/MyDropdown';
+import Search from './Search';
 
 const StyledFilter = styled.div`
   margin-bottom: 1.4rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  grid-gap: 5rem;
+  position: relative;
 
   .pre-tag-text {
     font-size: 1.7rem;
     text-transform: uppercase;
-    margin-right: 1rem;
     font-weight: 300;
   }
 
@@ -22,31 +23,25 @@ const StyledFilter = styled.div`
   }
 
   .sort {
-    float: right;
-    position: relative;
+    min-width: 12rem;
+    position: absolute;
+    right: 0;
   }
 
   @media (max-width: 550px) {
     margin: 3rem;
+    display: block;
+
+    .sort {
+      position: relative;
+    }
   }
 `;
 
 const Filter = () => {
-  const { tags } = useContext(TagsContext);
-  const { updateFilter, filter } = useContext(ProjectsContext);
-
   return (
     <StyledFilter>
-      <span className="pre-tag-text">Tags:</span>
-      {tags.map(tag => (
-        <Badge
-          className="tag"
-          key={tag.id}
-          badgeText={tag.name}
-          handleSelect={() => updateFilter('tags', tag.name)}
-          isSelected={filter.tags.includes(tag.name)}
-        />
-      ))}
+      <Search />
       <MyDropdown className="sort" dropdownText="Sort By" />
     </StyledFilter>
   );
