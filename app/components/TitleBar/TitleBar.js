@@ -2,17 +2,61 @@ import React from 'react';
 import styled from 'styled-components';
 
 const StyledTitleBar = styled.div`
+  /* HEADER with drop-shadow on scroll */
   color: ${({ theme }) => theme.darkerGrey};
-  height: 5rem;
-  text-align: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1;
   font-size: 0.95rem;
-  background: white;
-  
+  height: 66px; /* 50 + 16px */
+  position: sticky;
+  /* negative top allows for 16 pixels of movement before sticking */
+  top: -16px;
+  /* make sure header overlaps main*/
+  z-index: 1;
+  /* fix weird flickering issue in chrome: https://stackoverflow.com/a/22224884/286685 */
+  -webkit-backface-visibility: hidden;
+
+  /* PSEUDO ELEMENTS to create drop-shadow */
+  &::before,
+  &::after {
+    content: '';
+    display: block;
+    height: 16px;
+    /* make pseudo elements sticky as well */
+    position: sticky;
+  }
+
+  /* SHADOW */
+  &::before {
+    top: 34px; /* shadow is at bottom of element, so at 34 + 16 = 64px */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  /* COVER */
+  &::after {
+    /* linear gradient from background color to transparent acts as
+     a transition effect so the shadow appears gradually */
+    background: linear-gradient(
+      white 10%,
+      rgba(255, 255, 255, 0.8) 50%,
+      rgba(255, 255, 255, 0.4) 70%,
+      transparent
+    );
+    top: 0;
+    /* cover should fall over shadow */
+    z-index: 2;
+  }
+
+  /* HEADER CONTENT */
+  & > div {
+    background: white;
+    height: 50px;
+    position: sticky;
+    top: 0px;
+    /* compensate for shadow with negative margin */
+    margin-top: -16px;
+    /* content should fall over shadow and cover */
+    z-index: 3;
+  }
+
   .right {
     display: flex;
     float: right;
@@ -64,14 +108,18 @@ const StyledTitleBar = styled.div`
   }
 
   @media (max-width: 550px) {
-    background: ${({ theme }) => theme.primaryBackground};
-    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.1);
+    & > div {
+      background: white;
+      background: ${({ theme }) => theme.primaryBackground};
+    }
   }
 `;
 
 const TitleBar = ({ children }) => (
   <StyledTitleBar>
-    <div className="right">{React.Children.map(children, (child, i) => child)}</div>
+    <div>
+      <div className="right">{React.Children.map(children, (child, i) => child)}</div>
+    </div>
   </StyledTitleBar>
 );
 
