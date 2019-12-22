@@ -1,35 +1,25 @@
-// @flow
-import React, { Component } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import { ThemeProvider } from 'styled-components';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 import ProjectsProvider from '../providers/ProjectsProvider';
-import TagsProvider from '../providers/TagsProvider';
-import type { Store } from '../reducers/types';
 import theme from '../theme';
-import Routes from '../Routes';
+import Authentication from '../components/Authentication';
 
-type Props = {
-  store: Store,
-  history: {},
-};
+const Root = ({ store, history }) => (
+  <Router>
+    <ThemeProvider theme={theme}>
+      <ProjectsProvider>
+        <Provider store={store}>
+          <ConnectedRouter history={history}>
+            <Authentication />
+          </ConnectedRouter>
+        </Provider>
+      </ProjectsProvider>
+    </ThemeProvider>
+  </Router>
+);
 
-export default class Root extends Component<Props> {
-  render() {
-    const { store, history } = this.props;
-    return (
-      <ThemeProvider theme={theme}>
-        <ProjectsProvider>
-          <TagsProvider>
-            <Provider store={store}>
-              <ConnectedRouter history={history}>
-                <Routes />
-              </ConnectedRouter>
-            </Provider>
-          </TagsProvider>
-        </ProjectsProvider>
-      </ThemeProvider>
-    );
-  }
-}
+export default Root;
