@@ -12,7 +12,7 @@ const theme = {
   lightGrey: '#E3E8EB',
   lighterGrey: '#E9EFF4',
   lightestGrey: '#F4F7F9',
-  transparentWhite: '#ffffffe6',
+  transparentWhite: '#ffffffba',
   border: '1px solid #D0D7DD',
 
   sizes: {

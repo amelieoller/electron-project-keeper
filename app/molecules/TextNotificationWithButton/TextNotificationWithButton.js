@@ -8,13 +8,14 @@ const StyledNotification = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 
   p {
     color: ${({ theme }) => theme.darkerGrey};
+    margin-right: 1rem;
   }
 
   .button {
-    margin-left: 1rem;
     white-space: nowrap;
   }
 `;

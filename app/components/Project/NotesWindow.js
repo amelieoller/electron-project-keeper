@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import Markdown from 'markdown-to-jsx';
 

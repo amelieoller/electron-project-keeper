@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+
 import Carousel, { Modal, ModalGateway } from 'react-images';
+import withUser from '../withUser'
 
 import {
   twoFlatArraysAreEqual,
@@ -89,7 +91,8 @@ const AdditionalInfo = ({
   projectNotes,
   setProjectNotes,
   additionalImages,
-  setAdditionalImages
+  setAdditionalImages,
+  user
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -202,7 +205,9 @@ const AdditionalInfo = ({
   };
 
   const handleUpdate = directory => {
-    firestore.doc(`projects/${project.id}`).update({ ...project, folder: directory });
+    firestore
+      .doc(`users/${user.uid}/projects/${project.id}`)
+      .update({ ...project, folder: directory });
   };
 
   const selectFolder = () => {
@@ -309,4 +314,4 @@ AdditionalInfo.propTypes = {
   })
 };
 
-export default AdditionalInfo;
+export default withUser(AdditionalInfo);

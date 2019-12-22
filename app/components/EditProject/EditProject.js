@@ -5,16 +5,19 @@ import { firestore } from '../../firebase';
 import { collectIdsAndData } from '../../utils/utilities';
 import Form from '../Form';
 import Loading from '../../atoms/Loading';
+import withUser from '../withUser';
 
 const StyledEditProject = styled.div``;
 
-const EditProject = ({ match }) => {
+const EditProject = ({ match, user }) => {
   const { projectId } = match.params;
   const [project, setProject] = useState();
 
   useEffect(() => {
     async function fetchData() {
       const snapshot = await firestore
+        .collection('users')
+        .doc(user.uid)
         .collection('projects')
         .doc(projectId)
         .get();
@@ -37,4 +40,4 @@ const EditProject = ({ match }) => {
   );
 };
 
-export default EditProject;
+export default withUser(EditProject);

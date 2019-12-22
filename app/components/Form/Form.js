@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 
@@ -87,7 +87,7 @@ const Form = ({ existingProject, history, titleText, user }) => {
 
   useEffect(() => {
     !!existingProject && setProject({ ...initialProjectState, ...existingProject });
-  }, [existingProject]);
+  }, [existingProject, initialProjectState]);
 
   const handleChange = event => {
     const { name, value } = event.target;

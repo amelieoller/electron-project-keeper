@@ -9,7 +9,7 @@ const StyledProjects = styled.div`
   grid-template-columns: ${props =>
     props.starred ? '1fr 1fr' : 'repeat(auto-fill, minmax(360px, 1fr))'};
   grid-gap: 5rem;
-  margin-top: 4rem;
+  margin-top: 3rem;
 
   @media (max-width: 1300px) {
     grid-template-columns: ${props => props.starred && '1fr'};
@@ -49,37 +49,39 @@ const Projects = () => {
   let otherProjects = projects;
 
   if (selectedSort === 'starred') {
-    otherProjects = projects.filter(project => !project.starred);
+    otherProjects = projects && projects.filter(project => !project.starred);
   }
 
   return (
     <>
       {selectedSort === 'starred' && (
         <StyledProjects starred={true}>
-          {projects
-            .filter(project => project.starred)
-            .map(project => (
-              <Project
-                key={project.id}
-                project={project}
-                projectOpenId={projectOpenId}
-                setProjectOpenId={setProjectOpenId}
-                selectedSort={selectedSort}
-              />
-            ))}
+          {projects &&
+            projects
+              .filter(project => project.starred)
+              .map(project => (
+                <Project
+                  key={project.id}
+                  project={project}
+                  projectOpenId={projectOpenId}
+                  setProjectOpenId={setProjectOpenId}
+                  selectedSort={selectedSort}
+                />
+              ))}
         </StyledProjects>
       )}
 
       <StyledProjects>
-        {otherProjects.map(project => (
-          <Project
-            key={project.id}
-            project={project}
-            projectOpenId={projectOpenId}
-            setProjectOpenId={setProjectOpenId}
-            selectedSort={selectedSort}
-          />
-        ))}
+        {otherProjects &&
+          otherProjects.map(project => (
+            <Project
+              key={project.id}
+              project={project}
+              projectOpenId={projectOpenId}
+              setProjectOpenId={setProjectOpenId}
+              selectedSort={selectedSort}
+            />
+          ))}
       </StyledProjects>
     </>
   );

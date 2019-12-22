@@ -7,6 +7,7 @@ import { ReactComponent as Star } from '../../assets/icons/star.svg';
 import Footer from './Footer';
 import AdditionalInfo from './AdditionalInfo';
 import { createAbsolutePath } from '../../utils/utilities';
+import withUser from '../withUser';
 
 const exec = require('child_process').exec;
 const fixPath = require('fix-path');
@@ -31,6 +32,7 @@ const StyledProject = styled.div`
 
   @media (max-width: 550px) {
     border: none;
+    border-radius: 0;
   }
 `;
 
@@ -41,15 +43,15 @@ const StyledStar = styled.span`
   cursor: pointer;
 
   path {
-    color: ${({ theme }) => theme.primary};
-    color: ${props => props.starred && props.theme.primary} !important;
-    fill: ${props => (props.starred ? props.theme.primary : 'transparent')};
+    color: ${({ theme }) => theme.primaryLight};
+    color: ${props => props.starred && props.theme.primaryLight} !important;
+    fill: ${props => (props.starred ? props.theme.primaryLight : 'transparent')};
   }
 
   &:hover path {
     transition: all ${({ theme }) => theme.transitions.ease};
-    fill: ${({ theme }) => theme.primary};
-    color: ${({ theme }) => theme.primary} !important;
+    fill: ${({ theme }) => theme.primaryLight};
+    color: ${({ theme }) => theme.primaryLight} !important;
   }
 `;
 
@@ -127,12 +129,12 @@ const TopContent = styled.div`
   }
 `;
 
-const Project = ({ project, projectOpenId, setProjectOpenId, selectedSort }) => {
+const Project = ({ project, projectOpenId, setProjectOpenId, selectedSort, user }) => {
   const [projectNotes, setProjectNotes] = useState(null);
   const [additionalImages, setAdditionalImages] = useState(null);
 
   const handleDelete = id => {
-    firestore.doc(`projects/${id}`).delete();
+    firestore.doc(`users/${user.uid}/projects/${id}`).delete();
   };
 
   const executeCommand = (command, callback) => {
@@ -170,7 +172,7 @@ const Project = ({ project, projectOpenId, setProjectOpenId, selectedSort }) => 
     const updated = new Date();
 
     firestore
-      .doc(`projects/${project.id}`)
+      .doc(`users/${user.uid}/projects/${project.id}`)
       .update({ starred: !project.starred, updated });
   };
 
@@ -237,4 +239,4 @@ Project.propTypes = {
   })
 };
 
-export default Project;
+export default withUser(Project);

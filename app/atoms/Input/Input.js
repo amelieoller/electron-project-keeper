@@ -20,9 +20,10 @@ const StyledInput = styled.div`
   input,
   textarea {
     margin-top: 0.4rem;
-    font-size: 1.6rem;
+    font-size: ${props => (props.small ? '1.3rem' : '1.5rem')};
+    font-weight: 300;
     width: 100%;
-    padding: 1.4rem 1.8rem;
+    padding: ${props => (props.small ? '0.7rem 1.1rem' : '1rem 1.2rem')};
     color: ${({ theme }) => theme.textDark};
     border: ${({ theme }) => theme.border};
     border-radius: ${({ theme }) => theme.sizes.borderRadius};
@@ -41,9 +42,9 @@ const StyledInput = styled.div`
   }
 `;
 
-const Input = ({ className, ...props }) => (
-  <StyledInput textarea={props.type} className={className}>
-    <label htmlFor={props.name}>{props.title}</label>
+const Input = ({ className, small, ...props }) => (
+  <StyledInput textarea={props.type} className={className} small={small}>
+    {props.title && <label htmlFor={props.name}>{props.title}</label>}
     {props.type === 'textarea' ? (
       <textarea id={props.name} {...props} />
     ) : (
@@ -56,7 +57,7 @@ Input.propTypes = {
   name: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   value: PropTypes.string.isRequired,
   required: PropTypes.bool,
   type: PropTypes.string
