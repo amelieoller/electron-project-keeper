@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import styled from 'styled-components';
 
 import Input from '../../atoms/Input';
-import { ProjectsContext } from '../../providers/ProjectsProvider';
+import { UserContext } from '../../providers/UserProvider';
 import Badge from '../../atoms/Badge';
 
 const StyledSearch = styled.div`
@@ -78,7 +78,7 @@ const Search = () => {
   const [userInput, setUserInput] = useState('');
   const [selectedTags, setSelectedTags] = useState([]);
 
-  const { updateFilter, tags } = useContext(ProjectsContext);
+  const { updateFilter, tags } = useContext(UserContext);
 
   useEffect(() => {
     setFilteredSuggestions(tags);

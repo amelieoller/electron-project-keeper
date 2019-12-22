@@ -4,20 +4,20 @@ import { ConnectedRouter } from 'connected-react-router';
 import { ThemeProvider } from 'styled-components';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import ProjectsProvider from '../providers/ProjectsProvider';
+import UserProvider from '../providers/UserProvider';
 import theme from '../theme';
 import Authentication from '../components/Authentication';
 
 const Root = ({ store, history }) => (
   <Router>
     <ThemeProvider theme={theme}>
-      <ProjectsProvider>
+      <UserProvider>
         <Provider store={store}>
           <ConnectedRouter history={history}>
             <Authentication />
           </ConnectedRouter>
         </Provider>
-      </ProjectsProvider>
+      </UserProvider>
     </ThemeProvider>
   </Router>
 );

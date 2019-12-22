@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ProjectsContext } from '../providers/ProjectsProvider';
+import { UserContext } from '../providers/UserProvider';
 
 const getDisplayName = WrappedComponent => {
   return WrappedComponent.displayName || WrappedComponent.name || 'Component';
@@ -9,9 +9,9 @@ const getDisplayName = WrappedComponent => {
 const withUser = Component => {
   const WrappedComponent = props => {
     return (
-      <ProjectsContext.Consumer>
+      <UserContext.Consumer>
         {({ user }) => <Component user={user} {...props} />}
-      </ProjectsContext.Consumer>
+      </UserContext.Consumer>
     );
   };
 

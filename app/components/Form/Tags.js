@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 
 import { firestore } from '../../firebase';
-import { ProjectsContext } from '../../providers/ProjectsProvider';
+import { UserContext } from '../../providers/UserProvider';
 import { ReactComponent as X } from '../../assets/icons/x.svg';
 import Button from '../../atoms/Button';
 import Input from '../../atoms/Input';
@@ -57,7 +57,7 @@ const StyledTags = styled.div`
 `;
 
 const Tags = ({ project, setProject, user }) => {
-  const { tags } = useContext(ProjectsContext);
+  const { tags } = useContext(UserContext);
   const [newTag, setNewTag] = useState('');
 
   const handleTagSelect = tagName => {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Dropdown from 'react-dropdown';
 
-import { ProjectsContext } from '../../providers/ProjectsProvider';
+import { UserContext } from '../../providers/UserProvider';
 import { ReactComponent as ChevronDown } from '../../assets/icons/chevron-down.svg';
 import { ReactComponent as ChevronUp } from '../../assets/icons/chevron-up.svg';
 
@@ -72,7 +72,7 @@ const StyledDropdown = styled.span`
 `;
 
 const MyDropdown = ({ dropdownText, className }) => {
-  const { updateSort, selectedSort } = useContext(ProjectsContext);
+  const { updateSort, selectedSort } = useContext(UserContext);
 
   const handleSelect = selectedItem => {
     !!selectedItem.value && updateSort(selectedItem.value);

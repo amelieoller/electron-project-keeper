@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
-import { ProjectsContext } from '../../providers/ProjectsProvider';
+import { UserContext } from '../../providers/UserProvider';
 import Project from '../Project';
 
 const StyledProjects = styled.div`
@@ -44,7 +44,7 @@ const StyledProjects = styled.div`
 `;
 
 const Projects = () => {
-  const { projects, selectedSort } = useContext(ProjectsContext);
+  const { projects, selectedSort } = useContext(UserContext);
   const [projectOpenId, setProjectOpenId] = useState(null);
   let otherProjects = projects;
 
