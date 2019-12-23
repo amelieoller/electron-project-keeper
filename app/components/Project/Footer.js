@@ -10,6 +10,13 @@ const StyledFooter = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-top: 2rem;
+
+  & > :first-child {
+    a,
+    svg {
+      margin: 0;
+    }
+  }
 `;
 
 const Footer = ({

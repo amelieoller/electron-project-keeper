@@ -6,8 +6,8 @@
 /* @import "~@fortawesome/fontawesome-free/css/all.css"; */
 
 *,
-*:after,
-*:before {
+*::after,
+*::before {
   box-sizing: border-box;
 }
 
@@ -54,7 +54,6 @@ p {
 }
 
 hr {
-  margin: 2.5rem 0;
   border: 0.5px solid #e9eff4;
 }
 

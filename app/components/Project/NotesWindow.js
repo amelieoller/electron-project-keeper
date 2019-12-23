@@ -16,6 +16,8 @@ const fs = require('fs');
 
 const SyledNotesWindow = styled.div`
   position: relative;
+  min-height: 7rem;
+  margin: 0 2.5rem;
 
   .markdown-window > *:first-child {
     margin-top: 0;

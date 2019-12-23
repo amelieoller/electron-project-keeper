@@ -20,9 +20,9 @@ const StyledNotification = styled.div`
   }
 `;
 
-const TextNotificationWithButton = ({ text, buttonText, onButtonClick }) => {
+const TextNotificationWithButton = ({ text, buttonText, onButtonClick, ...props }) => {
   return (
-    <StyledNotification>
+    <StyledNotification {...props}>
       <p>{text}</p>
       <div className="button">
         <Button type="button" onClick={onButtonClick}>
