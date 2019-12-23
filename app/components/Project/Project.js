@@ -8,6 +8,7 @@ import Footer from './Footer';
 import AdditionalInfo from './AdditionalInfo';
 import { createAbsolutePath } from '../../utils/utilities';
 import withUser from '../../hocs/withUser';
+import withImages from '../../hocs/withImages';
 
 const exec = require('child_process').exec;
 const fixPath = require('fix-path');
@@ -18,21 +19,12 @@ const StyledProject = styled.div`
   border: ${({ theme }) => theme.border};
   transition: all 0.8s ease;
   border-radius: ${({ theme }) => theme.sizes.borderRadius};
-  padding: 2.5rem;
   position: relative;
-  display: ${props => (props.starred ? 'grid' : 'block')};
   overflow-x: auto;
+  padding: 2.5rem 0;
 
-  grid-template-columns: 40% auto;
-  grid-column-gap: 4rem;
-
-  @media (max-width: 870px) {
-    display: block;
-  }
-
-  @media (max-width: 550px) {
-    border: none;
-    border-radius: 0;
+  hr {
+    margin: 2.5rem;
   }
 `;
 
@@ -129,7 +121,33 @@ const TopContent = styled.div`
   }
 `;
 
-const Project = ({ project, projectOpenId, setProjectOpenId, selectedSort, user }) => {
+const StyledTopSection = styled.span`
+  padding: 0 2.5rem;
+  position: relative;
+  display: ${props => (props.starred ? 'grid' : 'block')};
+  overflow-x: auto;
+
+  grid-template-columns: 40% auto;
+  grid-column-gap: 4rem;
+
+  @media (max-width: 870px) {
+    display: block;
+  }
+
+  @media (max-width: 550px) {
+    border: none;
+    border-radius: 0;
+  }
+`;
+
+const Project = ({
+  project,
+  projectOpenId,
+  setProjectOpenId,
+  selectedSort,
+  user,
+  images
+}) => {
   const [projectNotes, setProjectNotes] = useState(null);
   const [additionalImages, setAdditionalImages] = useState(null);
 
@@ -180,41 +198,43 @@ const Project = ({ project, projectOpenId, setProjectOpenId, selectedSort, user 
 
   return (
     <StyledProject starred={isStarred}>
-      <StyledStar starred={isStarred} className="star-container">
-        <Star onClick={handleStarClick} />
-      </StyledStar>
+      <StyledTopSection starred={isStarred}>
+        <StyledStar starred={isStarred} className="star-container">
+          <Star onClick={handleStarClick} />
+        </StyledStar>
 
-      <ProjectImageTop
-        image={
-          project.image
-            ? project.image
-            : 'https://res.cloudinary.com/dpekucrvb/image/upload/v1573953781/undraw_insert_block_efyb.svg'
-        }
-        starred={isStarred}
-        onClick={expandCard}
-      />
-      <ProjectBody starred={isStarred}>
-        <WithoutExtraContent>
-          <TopContent>
-            <h3>{project.title}</h3>
-            <p>{project.description}</p>
+        <ProjectImageTop
+          image={
+            project.image && images[project.image]
+              ? images[project.image]
+              : images['default.svg']
+          }
+          starred={isStarred}
+          onClick={expandCard}
+        />
+        <ProjectBody starred={isStarred}>
+          <WithoutExtraContent>
+            <TopContent>
+              <h3>{project.title}</h3>
+              <p>{project.description}</p>
 
-            <div className="tags">
-              {project.tags.map(tag => (
-                <span key={tag}>{tag} · </span>
-              ))}
-            </div>
-          </TopContent>
+              <div className="tags">
+                {project.tags.map(tag => (
+                  <span key={tag}>{tag} · </span>
+                ))}
+              </div>
+            </TopContent>
 
-          <Footer
-            project={project}
-            openFolderInEditor={openFolderInEditor}
-            handleDelete={handleDelete}
-            expandCard={expandCard}
-            showExtraInfo={projectOpenId === project.id}
-          />
-        </WithoutExtraContent>
-      </ProjectBody>
+            <Footer
+              project={project}
+              openFolderInEditor={openFolderInEditor}
+              handleDelete={handleDelete}
+              expandCard={expandCard}
+              showExtraInfo={projectOpenId === project.id}
+            />
+          </WithoutExtraContent>
+        </ProjectBody>
+      </StyledTopSection>
       {projectOpenId === project.id && (
         <AdditionalInfo
           project={project}
@@ -239,4 +259,4 @@ Project.propTypes = {
   })
 };
 
-export default withUser(Project);
+export default withUser(withImages(Project));

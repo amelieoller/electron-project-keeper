@@ -6,6 +6,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import UserProvider from '../providers/UserProvider';
 import ErrorProvider from '../providers/ErrorProvider';
+import ImageProvider from '../providers/ImageProvider';
 import theme from '../theme';
 import Authentication from '../components/Authentication';
 
@@ -14,11 +15,13 @@ const Root = ({ store, history }) => (
     <ThemeProvider theme={theme}>
       <UserProvider>
         <ErrorProvider>
-          <Provider store={store}>
-            <ConnectedRouter history={history}>
-              <Authentication />
-            </ConnectedRouter>
-          </Provider>
+          <ImageProvider>
+            <Provider store={store}>
+              <ConnectedRouter history={history}>
+                <Authentication />
+              </ConnectedRouter>
+            </Provider>
+          </ImageProvider>
         </ErrorProvider>
       </UserProvider>
     </ThemeProvider>

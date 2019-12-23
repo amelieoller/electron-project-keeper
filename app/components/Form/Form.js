@@ -8,8 +8,9 @@ import Button from '../../atoms/Button';
 import Input from '../../atoms/Input';
 import TextNotificationWithButton from '../../molecules/TextNotificationWithButton';
 import { createAbsolutePath, createRelativePath } from '../../utils/utilities';
-import withUser from '../../hocs/withUser';
 import Tags from './Tags';
+import withUser from '../../hocs/withUser';
+import withImages from '../../hocs/withImages';
 
 const { remote } = window.require('electron');
 const { dialog } = remote.require('electron');
@@ -68,7 +69,47 @@ const StyledForm = styled.div`
   }
 `;
 
-const Form = ({ existingProject, history, titleText, user }) => {
+const AdditionalImages = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  height: 200px;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 1rem;
+  cursor: pointer;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .image-wrap:last-child img {
+    margin-right: 2.5rem;
+  }
+
+  .image-wrap {
+    flex: 0 0 auto;
+    margin-right: 1rem;
+    height: 200px;
+
+    img {
+      border: ${({ theme }) => theme.border};
+
+      height: 100%;
+      width: auto;
+
+      &.selected {
+        border: 2px solid ${({ theme }) => theme.primaryBackground};
+      }
+    }
+  }
+`;
+
+const LeftForm = styled.div`
+  overflow-x: auto;
+`;
+
+const Form = ({ existingProject, history, titleText, user, images }) => {
   const initialProjectState = {
     title: '',
     description: '',
@@ -135,7 +176,7 @@ const Form = ({ existingProject, history, titleText, user }) => {
     <StyledForm>
       <h2>{titleText}</h2>
       <form onSubmit={handleSubmit}>
-        <div>
+        <LeftForm>
           <Input
             onChange={handleChange}
             value={project.title}
@@ -176,7 +217,24 @@ const Form = ({ existingProject, history, titleText, user }) => {
             title="Live Site"
             type="text"
           />
-        </div>
+          <AdditionalImages>
+            {images &&
+              Object.keys(images).map(imageKey => (
+                <div
+                  key={imageKey}
+                  className="image-wrap"
+                  onClick={() => {
+                    setProject({ ...project, image: imageKey });
+                  }}
+                >
+                  <img
+                    src={images[imageKey]}
+                    className={imageKey === project.image ? 'selected' : ''}
+                  />
+                </div>
+              ))}
+          </AdditionalImages>
+        </LeftForm>
 
         <Tags project={project} setProject={setProject} user={user} />
 
@@ -204,4 +262,4 @@ const Form = ({ existingProject, history, titleText, user }) => {
   );
 };
 
-export default withUser(withRouter(Form));
+export default withUser(withImages(withRouter(Form)));

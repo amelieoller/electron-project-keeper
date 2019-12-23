@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 import Carousel, { Modal, ModalGateway } from 'react-images';
-import withUser from '../../hocs/withUser'
+import withUser from '../../hocs/withUser';
 
 import {
   twoFlatArraysAreEqual,
@@ -23,11 +23,14 @@ const MoreInfo = styled.div`
   display: flex;
   flex-direction: column;
   overflow-x: auto;
-
   grid-column: span 2;
 
   img {
     width: 100%;
+  }
+
+  .add-spacing {
+    padding: 0 2.5rem;
   }
 `;
 
@@ -50,6 +53,7 @@ const AdditionalImages = styled.div`
     height: 200px;
     width: 8rem;
     cursor: pointer;
+    margin-left: 2.5rem;
 
     &:hover {
       background: ${({ theme }) => theme.lightGrey};
@@ -72,13 +76,17 @@ const AdditionalImages = styled.div`
     }
   }
 
+  .image-wrap:last-child img {
+    margin-right: 2.5rem;
+  }
+
   .image-wrap {
     flex: 0 0 auto;
     margin-right: 1rem;
-    border: ${({ theme }) => theme.border};
     height: 200px;
 
     img {
+      border: ${({ theme }) => theme.border};
       height: 100%;
       width: auto;
       cursor: zoom-in;
@@ -263,6 +271,7 @@ const AdditionalInfo = ({
           text="You Have No Image Folder for This Project."
           buttonText="Add Image Folder"
           onButtonClick={addFolder}
+          className="add-spacing"
         />
       )}
     </>
@@ -275,6 +284,7 @@ const AdditionalInfo = ({
         text="You Have No Folder Selected for This Project."
         buttonText="Add Folder"
         onButtonClick={selectFolder}
+        className="add-spacing"
       />
     </>
   );
