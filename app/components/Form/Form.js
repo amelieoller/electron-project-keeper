@@ -7,7 +7,12 @@ import { ReactComponent as Check } from '../../assets/icons/check.svg';
 import Button from '../../atoms/Button';
 import Input from '../../atoms/Input';
 import TextNotificationWithButton from '../../molecules/TextNotificationWithButton';
-import { createAbsolutePath, createRelativePath } from '../../utils/utilities';
+import {
+  createAbsolutePath,
+  createRelativePath,
+  moveArrayItem,
+  twoFlatArraysAreEqual
+} from '../../utils/utilities';
 import Tags from './Tags';
 import withUser from '../../hocs/withUser';
 import withImages from '../../hocs/withImages';
@@ -64,7 +69,32 @@ const StyledForm = styled.div`
     grid-column: span 2;
 
     .submit-button {
-      text-align: center;
+      display: flex;
+      align-items: center;
+
+      .messages {
+        display: flex;
+        flex-direction: column;
+        margin-left: 2rem;
+        font-size: 1.2rem;
+        justify-content: space-around;
+        height: 3.5rem;
+
+        .discard-link {
+          cursor: pointer;
+          text-decoration: underline;
+          color: ${({ theme }) => theme.primaryLight};
+
+          &:hover {
+            color: ${({ theme }) => theme.text};
+          }
+        }
+
+        .error {
+          color: ${({ theme }) => theme.primaryBackground};
+          font-style: italic;
+        }
+      }
     }
   }
 `;
@@ -125,26 +155,38 @@ const Form = ({ existingProject, history, titleText, user, images }) => {
   };
 
   const [project, setProject] = useState(initialProjectState);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    !!existingProject && setProject({ ...initialProjectState, ...existingProject });
-  }, [existingProject, initialProjectState]);
+    resetProject();
+  }, [existingProject]);
 
-  const handleChange = event => {
-    const { name, value } = event.target;
+  const resetProject = () => {
+    !!existingProject
+      ? setProject({ ...initialProjectState, ...existingProject })
+      : setProject(initialProjectState);
+  };
+
+  const handleChange = e => {
+    const { name, value } = e.target;
     setProject({ ...project, [name]: value });
   };
 
-  const handleSubmit = event => {
-    event.preventDefault();
+  const handleSubmit = e => {
+    e.preventDefault();
 
     if (project.title) {
-      history.push('/');
+      if (!compareProjects()) {
+        // if projects are different
+        project.id ? handleUpdate() : handleCreate();
+      }
 
-      project.id ? handleUpdate() : handleCreate();
+      history.push('/');
+    } else {
+      // if project doesn't have a title
+      setError('Project needs to have title.');
     }
   };
-
   const handleCreate = () => {
     firestore.collection(`users/${user.uid}/projects`).add(project);
   };
@@ -170,6 +212,23 @@ const Form = ({ existingProject, history, titleText, user, images }) => {
       ...project,
       folder: createRelativePath(directory[0])
     });
+  };
+
+  const compareProjects = () => {
+    let initialProject = existingProject ? existingProject : initialProjectState;
+
+    const attributes = [
+      'title',
+      'description',
+      'github',
+      'folder',
+      'image',
+      'server',
+      'live'
+    ];
+
+    const attrCompare = attributes.every(attr => project[attr] === initialProject[attr]);
+    return attrCompare && twoFlatArraysAreEqual(project.tags, initialProject.tags);
   };
 
   return (
@@ -219,7 +278,11 @@ const Form = ({ existingProject, history, titleText, user, images }) => {
           />
           <AdditionalImages>
             {images &&
-              Object.keys(images).map(imageKey => (
+              moveArrayItem(
+                Object.keys(images),
+                Object.keys(images).indexOf(project.image),
+                0
+              ).map(imageKey => (
                 <div
                   key={imageKey}
                   className="image-wrap"
@@ -255,6 +318,26 @@ const Form = ({ existingProject, history, titleText, user, images }) => {
               <Check />
               Submit
             </Button>
+
+            <div className="messages">
+              {!compareProjects() && (
+                <span
+                  className="discard-link"
+                  onClick={() => {
+                    if (
+                      window.confirm(
+                        "Are you sure? This will wipe out any changes you've made so far."
+                      )
+                    )
+                      resetProject();
+                  }}
+                >
+                  Discard Changes
+                </span>
+              )}
+
+              {error && !project.title && <span className="error">{error}</span>}
+            </div>
           </div>
         </div>
       </form>
