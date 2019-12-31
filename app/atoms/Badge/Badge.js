@@ -43,7 +43,7 @@ const Badge = ({ badgeText, handleClick, isSelected, className, count }) => {
   return (
     <StyledBadge isSelected={isSelected} onClick={handleClick} className={className}>
       {badgeText}
-      {count && <Counter className="badge">{count}</Counter>}
+      {count >= 0 && <Counter className="badge">{count}</Counter>}
     </StyledBadge>
   );
 };
