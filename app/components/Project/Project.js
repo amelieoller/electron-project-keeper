@@ -26,6 +26,11 @@ const StyledProject = styled.div`
   hr {
     margin: 2.5rem;
   }
+
+  @media (max-width: 550px) {
+    border: none;
+    border-radius: 0;
+  }
 `;
 
 const StyledStar = styled.span`
@@ -42,8 +47,8 @@ const StyledStar = styled.span`
 
   &:hover path {
     transition: all ${({ theme }) => theme.transitions.ease};
-    fill: ${({ theme }) => theme.primaryLight};
-    color: ${({ theme }) => theme.primaryLight} !important;
+    fill: ${props => (props.starred ? 'transparent' : props.theme.primaryLight)};
+    color: ${({theme}) => theme.primaryLight} !important;
   }
 `;
 
@@ -123,7 +128,6 @@ const TopContent = styled.div`
 
 const StyledTopSection = styled.span`
   padding: 0 2.5rem;
-  position: relative;
   display: ${props => (props.starred ? 'grid' : 'block')};
   overflow-x: auto;
 
@@ -132,11 +136,6 @@ const StyledTopSection = styled.span`
 
   @media (max-width: 870px) {
     display: block;
-  }
-
-  @media (max-width: 550px) {
-    border: none;
-    border-radius: 0;
   }
 `;
 
@@ -199,7 +198,7 @@ const Project = ({
   return (
     <StyledProject starred={isStarred}>
       <StyledTopSection starred={isStarred}>
-        <StyledStar starred={isStarred} className="star-container">
+        <StyledStar starred={isStarred} className="star-container" data-tip={isStarred ? 'Un-Star Project' : "Star Project"}>
           <Star onClick={handleStarClick} />
         </StyledStar>
 
@@ -220,7 +219,7 @@ const Project = ({
 
               <div className="tags">
                 {project.tags.map(tag => (
-                  <span key={tag}>{tag} · </span>
+                  <span key={tag.id}>{tag.name} · </span>
                 ))}
               </div>
             </TopContent>

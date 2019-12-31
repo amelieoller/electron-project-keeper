@@ -7,6 +7,7 @@ const StyledTitleBar = styled.div`
   font-size: 0.95rem;
   height: 66px; /* 50 + 16px */
   position: sticky;
+  -webkit-app-region: drag;
   /* negative top allows for 16 pixels of movement before sticking */
   top: -16px;
   /* make sure header overlaps main*/

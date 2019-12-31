@@ -24,12 +24,12 @@ const StyledIconWithTooltip = styled.span`
 
   svg {
     cursor: pointer;
-    color: ${({ theme }) => theme.lightGrey};
+    color: ${({ theme }) => theme.primaryLight};
 
     &.active,
     &:hover {
       transition: all ${({ theme }) => theme.transitions.ease};
-      color: ${({ theme }) => theme.darkerGrey};
+      color: ${({ theme }) => theme.primary};
     }
   }
 `;

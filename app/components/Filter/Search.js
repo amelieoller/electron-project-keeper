@@ -9,8 +9,8 @@ const StyledSearch = styled.div`
   margin-bottom: 1.6rem;
   position: relative;
 
-  @media (min-width: 550px) and (max-width: 810px) {
-    max-width: 22rem;
+  @media (min-width: 550px) and (max-width: 930px) {
+    max-width: 35vw;
   }
 
   .selected-tags {
@@ -83,6 +83,12 @@ const Search = () => {
   useEffect(() => {
     setFilteredSuggestions(tags);
   }, [tags]);
+
+  useEffect(() => {
+    return () => {
+      updateFilter('tags', null);
+    };
+  }, []);
 
   const tagsLeftToFilter = selectedTags =>
     tags && tags.filter(tag => !selectedTags.includes(tag));
