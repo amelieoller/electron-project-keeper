@@ -213,7 +213,7 @@ const Project = ({
     <StyledProject starred={isStarred} ref={myRef}>
       <StyledTopSection starred={isStarred}>
         <StyledStar
-          starred={isStarred}
+          starred={project.starred}
           className="star-container"
           data-tip={isStarred ? 'Un-Star Project' : 'Star Project'}
         >
