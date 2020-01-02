@@ -63,16 +63,21 @@ const UserProvider = ({ children }) => {
   const updateFilter = (type, selectedItem) => {
     let newItems;
 
-    if (filter[type].includes(selectedItem)) {
-      const index = filter[type].indexOf(selectedItem);
-      if (index !== -1) {
-        newItems = filter[type].filter(t => t !== selectedItem);
-      }
+    if (selectedItem === null) {
+      // Reset filters
+      setFilter({ tags: [] });
     } else {
-      newItems = [...filter[type], selectedItem];
-    }
+      if (filter[type].includes(selectedItem)) {
+        const index = filter[type].indexOf(selectedItem);
+        if (index !== -1) {
+          newItems = filter[type].filter(t => t !== selectedItem);
+        }
+      } else {
+        newItems = [...filter[type], selectedItem];
+      }
 
-    setFilter({ [type]: newItems });
+      setFilter({ [type]: newItems });
+    }
   };
 
   const updateSort = toSortBy => {
@@ -103,9 +108,11 @@ const UserProvider = ({ children }) => {
     }
 
     // Filter
-    if (filter.tags.length !== 0) {
+    if (filter.tags.length === 0) {
+      filteredAndSortedProjects = projects;
+    } else {
       filteredAndSortedProjects = projects.filter(r =>
-        filter.tags.every(tag => -1 !== r.tags.indexOf(tag))
+        filter.tags.every(tag => -1 !== r.tags.map(t => t.name).indexOf(tag))
       );
     }
 

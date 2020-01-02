@@ -60,16 +60,16 @@ const Tags = ({ project, setProject, user }) => {
   const { tags } = useContext(UserContext);
   const [newTag, setNewTag] = useState('');
 
-  const handleTagSelect = tagName => {
+  const handleTagSelect = tag => {
     let newTags;
 
-    if (project.tags.includes(tagName)) {
-      const index = project.tags.indexOf(tagName);
+    if (project.tags.map(tag => tag.name).includes(tag.name)) {
+      const index = project.tags.map(tag => tag.name).indexOf(tag.name);
       if (index !== -1) {
-        newTags = project.tags.filter(t => t !== tagName);
+        newTags = project.tags.filter(t => t.name !== tag.name);
       }
     } else {
-      newTags = [...project.tags, tagName];
+      newTags = [...project.tags, tag];
     }
 
     setProject({
@@ -80,10 +80,16 @@ const Tags = ({ project, setProject, user }) => {
 
   const handleTagCreation = () => {
     if (newTag !== '') {
-      firestore.collection(`users/${user.uid}/tags`).add({ name: newTag });
+      firestore
+        .collection(`users/${user.uid}/tags`)
+        .add({ name: newTag, count: 0 })
+        .then(tagRef => {
+          handleTagSelect({ name: newTag, id: tagRef.id });
+        })
+        .catch(error => {
+          console.error('Error adding document: ', error);
+        });
       setNewTag('');
-
-      handleTagSelect(newTag);
     }
   };
 
@@ -99,8 +105,8 @@ const Tags = ({ project, setProject, user }) => {
           <div className="tag-wrapper" key={tag.id}>
             <Checkbox
               label={tag.name}
-              checked={project.tags.includes(tag.name)}
-              onChange={e => handleTagSelect(e.target.name)}
+              checked={project.tags.map(tag => tag.name).includes(tag.name)}
+              onChange={e => handleTagSelect({ name: tag.name, id: tag.id })}
               name={tag.name}
             />
             <span
