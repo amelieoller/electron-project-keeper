@@ -193,7 +193,7 @@ const Search = () => {
                 data-id={index}
                 onClick={onClick}
               >
-                {suggestion.name}
+                {suggestion.name} · {suggestion.count}
               </li>
             );
           })}
@@ -233,15 +233,18 @@ const Search = () => {
 
       <div className="selected-tags">
         {selectedTags.length !== 0 &&
-          selectedTags.map(tag => (
-            <Badge
-              className="tag"
-              key={tag.id}
-              badgeText={tag.name}
-              handleClick={() => deselectTag(tag)}
-              isSelected={true}
-            />
-          ))}
+          selectedTags.map(tag => {
+            return (
+              <Badge
+                className="tag"
+                key={tag.id}
+                badgeText={tag.name}
+                handleClick={() => deselectTag(tag)}
+                isSelected={true}
+                count={tag.count}
+              />
+            );
+          })}
       </div>
     </StyledSearch>
   );
