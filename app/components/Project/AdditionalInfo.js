@@ -32,6 +32,14 @@ const MoreInfo = styled.div`
   .add-spacing {
     padding: 0 2.5rem;
   }
+
+  .double-click-explanation {
+    color: ${({ theme }) => theme.darkerGrey};
+    text-align: end;
+    margin-right: 2.5rem;
+    margin-top: 0.3rem;
+    margin-bottom: -1.6rem;
+  }
 `;
 
 const AdditionalImages = styled.div`
@@ -41,6 +49,7 @@ const AdditionalImages = styled.div`
   height: 200px;
   width: 100%;
   -webkit-overflow-scrolling: touch;
+  cursor: ${props => props.imageIsDragging && 'grabbing'};
 
   &::-webkit-scrollbar {
     display: none;
@@ -54,6 +63,15 @@ const AdditionalImages = styled.div`
     width: 8rem;
     cursor: pointer;
     margin-left: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .text {
+      color: ${({ theme }) => theme.grey};
+      margin-top: 0.5rem;
+    }
 
     &:hover {
       background: ${({ theme }) => theme.lightGrey};
@@ -62,13 +80,17 @@ const AdditionalImages = styled.div`
       svg path {
         fill: ${({ theme }) => theme.darkerGrey};
       }
+
+      .text {
+        color: ${({ theme }) => theme.darkerGrey};
+        margin-top: 0.5rem;
+      }
     }
 
     svg {
       width: 30px;
       margin: 0 auto;
       display: block;
-      height: 100%;
 
       path {
         fill: ${({ theme }) => theme.lightGrey};
@@ -103,6 +125,9 @@ const AdditionalInfo = ({
   user
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [imageIsDragging, setImageIsDragging] = useState(false);
+  const [startX, setStartX] = useState(null);
+  const [scrollLeft, setScrollLeft] = useState(null);
 
   useEffect(() => {
     if (project.folder) {
@@ -235,15 +260,35 @@ const AdditionalInfo = ({
       <hr />
       {additionalImages ? (
         <>
-          <AdditionalImages>
+          <AdditionalImages
+            imageIsDragging={imageIsDragging}
+            onMouseDown={e => {
+              setImageIsDragging(true);
+              const imageWrapper = e.target.parentElement.parentElement;
+              setStartX(e.pageX - imageWrapper.offsetLeft);
+              setScrollLeft(imageWrapper.scrollLeft);
+            }}
+            onMouseUp={() => setImageIsDragging(false)}
+            onMouseLeave={() => setImageIsDragging(false)}
+            onMouseMove={e => {
+              if (imageIsDragging) {
+                e.preventDefault();
+                const imageWrapper = e.target.parentElement.parentElement;
+                const x = e.pageX - imageWrapper.offsetLeft;
+                const walk = (x - startX) * 3;
+                imageWrapper.scrollLeft = scrollLeft - walk;
+              }
+            }}
+          >
             <div className="add-image" onClick={handleAddImage}>
               <Plus />
+              <span className="text">Add Image</span>
             </div>
             {additionalImages.map(image => (
               <div
                 key={image}
                 className="image-wrap"
-                onClick={() => setModalIsOpen(!modalIsOpen)}
+                onDoubleClick={() => setModalIsOpen(!modalIsOpen)}
               >
                 <img
                   src={`${createAbsolutePath(project.folder)}/images/${image}`}
@@ -252,6 +297,11 @@ const AdditionalInfo = ({
               </div>
             ))}
           </AdditionalImages>
+          {additionalImages.length !== 0 && (
+            <span className="double-click-explanation">
+              * Double Click To Open Large View
+            </span>
+          )}
           <ModalGateway>
             {modalIsOpen ? (
               <Modal onClose={() => setModalIsOpen(!modalIsOpen)}>
