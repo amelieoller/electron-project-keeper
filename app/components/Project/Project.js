@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -48,7 +48,7 @@ const StyledStar = styled.span`
   &:hover path {
     transition: all ${({ theme }) => theme.transitions.ease};
     fill: ${props => (props.starred ? 'transparent' : props.theme.primaryLight)};
-    color: ${({theme}) => theme.primaryLight} !important;
+    color: ${({ theme }) => theme.primaryLight} !important;
   }
 `;
 
@@ -149,6 +149,7 @@ const Project = ({
 }) => {
   const [projectNotes, setProjectNotes] = useState(null);
   const [additionalImages, setAdditionalImages] = useState(null);
+  const myRef = useRef(null);
 
   const handleDelete = id => {
     firestore.doc(`users/${user.uid}/projects/${id}`).delete();
@@ -177,11 +178,24 @@ const Project = ({
     });
   };
 
-  const expandCard = () => {
+  const expandCard = e => {
     if (project.id === projectOpenId) {
       setProjectOpenId(null);
     } else {
       setProjectOpenId(project.id);
+
+      setTimeout(() => {
+        const offset = 60;
+        const bodyRect = document.body.getBoundingClientRect().top;
+        const elementRect = myRef.current.getBoundingClientRect().top;
+        const elementPosition = elementRect - bodyRect;
+        const offsetPosition = elementPosition - offset;
+
+        window.scrollTo({
+          behavior: 'smooth',
+          top: offsetPosition
+        });
+      }, 100);
     }
   };
 
@@ -196,9 +210,13 @@ const Project = ({
   const isStarred = project.starred && selectedSort === 'starred';
 
   return (
-    <StyledProject starred={isStarred}>
+    <StyledProject starred={isStarred} ref={myRef}>
       <StyledTopSection starred={isStarred}>
-        <StyledStar starred={isStarred} className="star-container" data-tip={isStarred ? 'Un-Star Project' : "Star Project"}>
+        <StyledStar
+          starred={isStarred}
+          className="star-container"
+          data-tip={isStarred ? 'Un-Star Project' : 'Star Project'}
+        >
           <Star onClick={handleStarClick} />
         </StyledStar>
 

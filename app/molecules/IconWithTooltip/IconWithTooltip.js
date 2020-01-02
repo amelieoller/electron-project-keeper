@@ -57,7 +57,7 @@ const IconWithTooltip = ({
   let iconWithLink;
 
   if (onClickFunc) {
-    iconWithLink = <a onClick={() => onClickFunc()}>{icon}</a>;
+    iconWithLink = <a onClick={onClickFunc}>{icon}</a>;
   } else if (external) {
     iconWithLink = (
       <a rel="noopener noreferrer" onClick={() => shell.openExternal(linkTo)}>

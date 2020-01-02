@@ -240,7 +240,7 @@ const NotesWindow = ({ projectNotes, createNewFile, project }) => {
               >
                 Edit
               </Button>
-              <span className="info">*or double click on note</span>
+              <span className="info">* Double Click On Note</span>
             </span>
           </>
         ) : (
@@ -281,7 +281,7 @@ const NotesWindow = ({ projectNotes, createNewFile, project }) => {
                 >
                   Save
                 </Button>
-                <span className="info">*or click outside note</span>
+                <span className="info">* Click Outside Note</span>
               </span>
             ) : (
               <Button
