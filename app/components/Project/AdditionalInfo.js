@@ -229,7 +229,7 @@ const AdditionalInfo = ({
   const addFolder = () => {
     const imageFolder = 'images';
     const projectPath = project.folder;
-    const fullImageFolderPath = `${os.homedir()}${projectPath}/${imageFolder}`;
+    const fullImageFolderPath = `${createAbsolutePath(projectPath)}/${imageFolder}`;
 
     if (!fs.existsSync(fullImageFolderPath)) {
       fs.mkdirSync(fullImageFolderPath);
