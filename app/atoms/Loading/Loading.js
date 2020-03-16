@@ -30,7 +30,7 @@ const dash = ({ offset }) => keyframes`
 
 const StyledLoading = styled.div`
   text-align: center;
-  margin-top: 20vh;
+  margin: 9vh 0 5vh 0;
 
   svg {
     animation: ${rotation} ${({ duration }) => duration} linear infinite;

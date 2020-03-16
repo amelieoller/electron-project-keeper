@@ -12,8 +12,10 @@ import {
 } from '../../utils/utilities';
 import { firestore } from '../../firebase';
 import { ReactComponent as Plus } from '../../assets/icons/plus.svg';
+import { ReactComponent as Trash } from '../../assets/icons/trash.svg';
 import TextNotificationWithButton from '../../molecules/TextNotificationWithButton';
 import NotesWindow from './NotesWindow';
+import Loading from '../../atoms/Loading';
 
 const fs = require('fs');
 const remote = window.require('electron').remote;
@@ -106,6 +108,7 @@ const AdditionalImages = styled.div`
     flex: 0 0 auto;
     margin-right: 1rem;
     height: 200px;
+    position: relative;
 
     img {
       border: ${({ theme }) => theme.border};
@@ -113,6 +116,24 @@ const AdditionalImages = styled.div`
       width: auto;
       cursor: zoom-in;
     }
+
+    &:hover {
+      .remove-image {
+        display: block;
+      }
+    }
+  }
+
+  .remove-image {
+    display: none;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    cursor: pointer;
+    background: #abababb5;
+    padding: 3px 4px;
+    border-radius: 9px;
+    color: white;
   }
 `;
 
@@ -128,12 +149,21 @@ const AdditionalInfo = ({
   const [imageIsDragging, setImageIsDragging] = useState(false);
   const [startX, setStartX] = useState(null);
   const [scrollLeft, setScrollLeft] = useState(null);
+  const [isLoadingNotes, setIsLoadingNotes] = useState(true);
+  const [isLoadingImages, setIsLoadingImages] = useState(true);
 
   useEffect(() => {
-    if (project.folder) {
-      getNoteContents();
-      getImages();
-    }
+    setTimeout(() => {
+      if (project.folder) {
+        const notesExist = getNoteContents();
+        const imagesExist = getImages();
+
+        if (!notesExist || !imagesExist) {
+          setIsLoadingImages(false);
+          setIsLoadingNotes(false);
+        }
+      }
+    }, 4000);
   }, []);
 
   const getNoteContents = () => {
@@ -218,8 +248,8 @@ const AdditionalInfo = ({
     const fileName = oldPath.slice(index + 1);
     const newPath = `${createAbsolutePath(project.folder)}/images/${fileName}`;
 
-    // Move file from original directory to new image directory
-    fs.rename(oldPath, newPath, err => {
+    // Copy file from original directory to new image directory
+    fs.copyFile(oldPath, newPath, err => {
       if (err) throw err;
       getImages();
       console.log('Rename complete!');
@@ -253,6 +283,16 @@ const AdditionalInfo = ({
     if (directory.length === 0) return;
 
     handleUpdate(createRelativePath(directory[0]));
+  };
+
+  const removeImage = filePath => {
+    console.log('removing...', filePath);
+
+    fs.unlink(filePath, err => {
+      console.log('error while removing file', err);
+    });
+
+    getImages();
   };
 
   const renderImageSection = () => (
@@ -294,6 +334,23 @@ const AdditionalInfo = ({
                   src={`${createAbsolutePath(project.folder)}/images/${image}`}
                   alt=""
                 />
+
+                <span
+                  className="remove-image"
+                  onClick={() => {
+                    if (
+                      window.confirm(
+                        'Are you sure? This action will move this image into the trash.'
+                      )
+                    ) {
+                      removeImage(
+                        `${createAbsolutePath(project.folder)}/images/${image}`
+                      );
+                    }
+                  }}
+                >
+                  <Trash />
+                </span>
               </div>
             ))}
           </AdditionalImages>
@@ -316,6 +373,8 @@ const AdditionalInfo = ({
             ) : null}
           </ModalGateway>
         </>
+      ) : isLoadingImages ? (
+        <Loading />
       ) : (
         <TextNotificationWithButton
           text="You Have No Image Folder for This Project."
@@ -341,7 +400,9 @@ const AdditionalInfo = ({
 
   return (
     <MoreInfo>
-      {project.folder ? (
+      {isLoadingImages || isLoadingNotes ? (
+        <Loading />
+      ) : project.folder ? (
         <>
           {renderImageSection()}
           {
@@ -352,6 +413,7 @@ const AdditionalInfo = ({
                 onChange={setProjectNotes}
                 createNewFile={createNewFile}
                 project={project}
+                isLoadingNotes={isLoadingNotes}
               />
             </>
           }

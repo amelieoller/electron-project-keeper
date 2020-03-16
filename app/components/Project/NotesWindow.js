@@ -11,6 +11,7 @@ import 'ace-builds/webpack-resolver';
 import TextNotificationWithButton from '../../molecules/TextNotificationWithButton';
 import Button from '../../atoms/Button';
 import { createAbsolutePath } from '../../utils/utilities';
+import Loading from '../../atoms/Loading';
 
 const fs = require('fs');
 
@@ -94,7 +95,7 @@ const SyledNotesWindow = styled.div`
   }
 `;
 
-const NotesWindow = ({ projectNotes, createNewFile, project }) => {
+const NotesWindow = ({ projectNotes, createNewFile, project, isLoadingNotes }) => {
   const [updatedNoteContent, setUpdatedNoteContent] = useState(projectNotes);
   const [noteContent, setNoteContent] = useState(projectNotes);
   const [showEdit, setShowEdit] = useState(false);
@@ -172,6 +173,7 @@ const NotesWindow = ({ projectNotes, createNewFile, project }) => {
 
   return (
     <SyledNotesWindow>
+      {/* If there is note content */}
       {!!noteContent ? (
         !showEdit ? (
           <>
@@ -296,6 +298,8 @@ const NotesWindow = ({ projectNotes, createNewFile, project }) => {
             )}
           </>
         )
+      ) : isLoadingNotes ? (
+        <Loading />
       ) : (
         <TextNotificationWithButton
           text="You Have No Notes File for This Project."
